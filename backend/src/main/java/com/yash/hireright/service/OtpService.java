@@ -14,12 +14,16 @@ public class OtpService {
     private final OtpStore otpStore;
     private final Resend resend;
 
+    private final String fromAddress;
+
     public OtpService(
             OtpStore otpStore,
-            @Value("${resend.api.key}") String apiKey
+            @Value("${resend.api.key}") String apiKey,
+            @Value("${resend.from.address}") String fromAddress
     ) {
         this.otpStore = otpStore;
         this.resend = new Resend(apiKey);
+        this.fromAddress = fromAddress;
     }
 
     public void sendOtp(String email) {
@@ -27,7 +31,7 @@ public class OtpService {
         otpStore.save(email, otp);
 
         CreateEmailOptions params = CreateEmailOptions.builder()
-                .from("HireRight <onboarding@resend.dev>")
+                .from(fromAddress)
                 .to(email)
                 .subject("HireRight — Your verification code")
                 .text(
