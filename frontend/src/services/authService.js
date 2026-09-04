@@ -5,7 +5,16 @@ export const loginUser = async (email, password) => {
         email,
         password,
     });
+    return response.data;
+};
 
+export const sendOtp = async (email) => {
+    const response = await api.post("/auth/send-otp", { email });
+    return response.data;
+};
+
+export const verifyOtp = async (email, otp) => {
+    const response = await api.post("/auth/verify-otp", { email, otp });
     return response.data;
 };
 
@@ -16,10 +25,7 @@ export const registerUser = async (userData) => {
 
 export const getUserRole = () => {
     const token = localStorage.getItem("token");
-
-    if (!token) {
-        return null;
-    }
+    if (!token) return null;
 
     try {
         const payload = JSON.parse(atob(token.split(".")[1]));
