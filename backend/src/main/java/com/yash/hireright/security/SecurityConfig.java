@@ -71,7 +71,9 @@ public class SecurityConfig {
 
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://hire-right-one.vercel.app"
+                "https://hire-right-one.vercel.app",
+                "https://myhireright.me",
+                "https://www.myhireright.me"
         ));
 
         configuration.setAllowedMethods(List.of(
