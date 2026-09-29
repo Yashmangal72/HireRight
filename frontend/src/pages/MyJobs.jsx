@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { deleteJob, getMyJobs } from "../services/recruiterService";
+import { FiMapPin, FiDollarSign, FiBriefcase, FiBarChart2 } from "react-icons/fi";
 
 function MyJobs() {
     const [jobs, setJobs] = useState([]);
@@ -106,7 +107,7 @@ function MyJobs() {
                                     <div>
                                         <h2>{job.title}</h2>
                                         <p className="job-location">
-                                            📍 {job.location}
+                                            <FiMapPin size={14} /> {job.location}
                                         </p>
                                     </div>
 
@@ -120,17 +121,9 @@ function MyJobs() {
                                 </p>
 
                                 <div className="job-meta">
-                                    <span className="job-meta-item">
-                                        💰 ₹{job.salary}
-                                    </span>
-
-                                    <span className="job-meta-item">
-                                        💼 {job.employmentType}
-                                    </span>
-
-                                    <span className="job-meta-item">
-                                        📊 {job.experienceLevel}
-                                    </span>
+                                    <span className="job-meta-item salary"><FiDollarSign size={14} /> ₹{job.salary}</span>
+                                    <span className="job-meta-item"><FiBriefcase size={14} /> {job.employmentType}</span>
+                                    <span className="job-meta-item"><FiBarChart2 size={14} /> {job.experienceLevel}</span>
                                 </div>
                             </div>
 

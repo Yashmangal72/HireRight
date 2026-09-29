@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getJobById } from "../services/jobService";
 import { applyForJob } from "../services/applicationService";
+import { FiMapPin, FiDollarSign, FiBriefcase, FiBarChart2 } from "react-icons/fi";
 
 function JobDetails() {
     const { id } = useParams();
@@ -70,25 +71,15 @@ function JobDetails() {
                     <h1>{job.title}</h1>
 
                     <p className="job-details-location">
-                        📍 {job.location}
+                        <FiMapPin size={15} /> {job.location}
                     </p>
-                </div>
+                    </div>
 
-                <div className="job-details-meta">
-
-                    <span>
-                        💰 ₹{job.salary}
-                    </span>
-
-                    <span>
-                        💼 {job.employmentType}
-                    </span>
-
-                    <span>
-                        📊 {job.experienceLevel}
-                    </span>
-
-                </div>
+                    <div className="job-details-meta">
+                        <span className="salary"><FiDollarSign size={14} /> ₹{job.salary}</span>
+                        <span><FiBriefcase size={14} /> {job.employmentType}</span>
+                        <span><FiBarChart2 size={14} /> {job.experienceLevel}</span>
+                    </div>
 
                 <div className="job-details-divider"></div>
 
