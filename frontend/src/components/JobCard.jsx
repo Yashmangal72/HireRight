@@ -1,6 +1,15 @@
 import { Link } from "react-router-dom";
 import { FiMapPin, FiDollarSign, FiBriefcase, FiBarChart2 } from "react-icons/fi";
 
+import { useEffect, useState } from "react";
+import { FiBookmark } from "react-icons/fi";
+import { useAuth } from "../context/AuthContext";
+import {
+    saveJob,
+    unsaveJob,
+    getSavedJobStatus,
+} from "../services/savedJobService";
+
 const LOGO_COLORS = ["#4f46e5", "#0d9488", "#db2777", "#d97706", "#0891b2", "#65a30d"];
 
 function getLogoColor(id) {
@@ -8,6 +17,40 @@ function getLogoColor(id) {
 }
 
 function JobCard({ job }) {
+    const { isAuthenticated, role } = useAuth();
+    const [saved, setSaved] = useState(false);
+    const [saving, setSaving] = useState(false);
+
+    useEffect(() => {
+        if (isAuthenticated && role === "CANDIDATE") {
+            getSavedJobStatus(job.id)
+                .then((data) => setSaved(data.saved))
+                .catch((error) => console.error(error));
+        }
+    }, [job.id, isAuthenticated, role]);
+
+    const handleToggleSave = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (saving) return;
+        setSaving(true);
+
+        try {
+            if (saved) {
+                await unsaveJob(job.id);
+                setSaved(false);
+            } else {
+                await saveJob(job.id);
+                setSaved(true);
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setSaving(false);
+        }
+    };
+
     return (
         <div className="job-card">
             <div className="job-card-header">
@@ -27,7 +70,28 @@ function JobCard({ job }) {
                     </div>
                 </div>
 
-                <span className="job-id">#{job.id}</span>
+                <div className="job-card-header-right">
+                    {isAuthenticated && role === "CANDIDATE" && (
+                        <button
+                            type="button"
+                            className={
+                                "bookmark-button" + (saved ? " saved" : "")
+                            }
+                            onClick={handleToggleSave}
+                            aria-label={
+                                saved ? "Remove from saved jobs" : "Save job"
+                            }
+                            disabled={saving}
+                        >
+                            <FiBookmark
+                                size={18}
+                                fill={saved ? "currentColor" : "none"}
+                            />
+                        </button>
+                    )}
+
+                    <span className="job-id">#{job.id}</span>
+                </div>
             </div>
 
             <p className="job-description">{job.description}</p>

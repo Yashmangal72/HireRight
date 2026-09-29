@@ -8,6 +8,7 @@ import {
     FiCalendar,
     FiCheckCircle,
     FiMapPin,
+    FiBookmark,
 } from "react-icons/fi";
 
 function CandidateDashboard() {
@@ -92,6 +93,18 @@ function CandidateDashboard() {
                         </span>
                         <span className="stat-label">Hired</span>
                     </div>
+                </div>
+            </div>
+
+            <div className="stat-card">
+                <div className="stat-icon saved">
+                    <FiBookmark size={20} />
+                </div>
+                <div>
+                    <span className="stat-number">
+                        {data.savedJobsCount}
+                    </span>
+                    <span className="stat-label">Saved Jobs</span>
                 </div>
             </div>
 

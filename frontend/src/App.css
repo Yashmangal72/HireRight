@@ -1661,7 +1661,7 @@ body.dark-theme .status-interview {
 
 .stat-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -1685,6 +1685,11 @@ body.dark-theme .status-interview {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.stat-icon.saved {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
 }
 
 .stat-icon.applications {
@@ -1950,6 +1955,42 @@ body.dark-theme .stat-icon.shortlisted {
   font-size: 0.875rem;
   font-weight: 500;
   border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.job-card-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  flex-shrink: 0;
+}
+
+.bookmark-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  transition: all var(--transition);
+}
+
+.bookmark-button:hover {
+  background-color: var(--color-border-light);
+  color: var(--color-text-secondary);
+}
+
+.bookmark-button.saved {
+  color: var(--color-accent);
+}
+
+.bookmark-button.saved:hover {
+  background-color: var(--color-accent-light);
+}
+
+.bookmark-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ============================================================

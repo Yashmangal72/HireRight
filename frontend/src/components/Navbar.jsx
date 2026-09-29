@@ -33,6 +33,10 @@ function Navbar() {
                                 Dashboard
                             </Link>
 
+                            <Link to="/saved-jobs" className="navbar-link">
+                                Saved Jobs
+                            </Link>
+
                             <Link to="/applications" className="navbar-link">
                                 My Applications
                             </Link>

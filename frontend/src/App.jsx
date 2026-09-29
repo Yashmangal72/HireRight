@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import CandidateDashboard from "./pages/CandidateDashboard";
 import RecruiterOverview from "./pages/RecruiterOverview";
+import SavedJobs from "./pages/SavedJobs";
 
 function App() {
     return (
@@ -42,6 +43,15 @@ function App() {
                     element={
                         <ProtectedRoute role="CANDIDATE">
                             <CandidateDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/saved-jobs"
+                    element={
+                        <ProtectedRoute role="CANDIDATE">
+                            <SavedJobs />
                         </ProtectedRoute>
                     }
                 />
