@@ -1831,6 +1831,26 @@ a.dashboard-list-item:hover {
   display: block;
 }
 
+.recruiter-stat-cards {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stat-icon.shortlisted {
+  background-color: #fce7f3;
+  color: #db2777;
+}
+
+body.dark-theme .stat-icon.shortlisted {
+  background-color: #4a1942;
+  color: #f472b6;
+}
+
+@media (max-width: 900px) {
+  .recruiter-stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .stat-cards {
     grid-template-columns: 1fr;

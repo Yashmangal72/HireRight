@@ -12,6 +12,7 @@ import RecruiterApplications from "./pages/RecruiterApplications";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import CandidateDashboard from "./pages/CandidateDashboard";
+import RecruiterOverview from "./pages/RecruiterOverview";
 
 function App() {
     return (
@@ -41,6 +42,15 @@ function App() {
                     element={
                         <ProtectedRoute role="CANDIDATE">
                             <CandidateDashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/recruiter/overview"
+                    element={
+                        <ProtectedRoute role="RECRUITER">
+                            <RecruiterOverview />
                         </ProtectedRoute>
                     }
                 />

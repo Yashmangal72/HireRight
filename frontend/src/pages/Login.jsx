@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { loginUser, getUserRole } from "../services/authService";
 
 function Login() {
     const navigate = useNavigate();
@@ -23,10 +24,10 @@ function Login() {
 
         try {
             const data = await loginUser(email, password);
-
             login(data);
 
-            navigate("/");
+            const role = getUserRole();
+            navigate(role === "CANDIDATE" ? "/dashboard" : "/recruiter/overview");
         } catch (error) {
             console.error(error);
 

@@ -41,8 +41,12 @@ function Navbar() {
 
                     {isAuthenticated && role === "RECRUITER" && (
                         <>
-                            <Link
-                                to="/recruiter"
+
+                            <Link to="/recruiter/overview" className="navbar-link">
+                                Overview
+                            </Link>
+
+                            <Link to="/recruiter"
                                 className="navbar-link"
                             >
                                 Post Job
