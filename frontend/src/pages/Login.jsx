@@ -76,7 +76,6 @@ function Login() {
                                 placeholder="Enter your password"
                                 required
                             />
-
                             <button
                                 type="button"
                                 className="password-toggle"
