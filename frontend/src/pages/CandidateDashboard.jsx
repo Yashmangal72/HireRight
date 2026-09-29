@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getCandidateDashboard } from "../services/dashboardService";
 import StatusStepper from "../components/StatusStepper";
+import ResumeCard from "../components/ResumeCard";
 import {
     FiFileText,
     FiCalendar,
@@ -53,6 +54,8 @@ function CandidateDashboard() {
                 <h1>Welcome back 👋</h1>
                 <p>Here's an overview of your job search journey.</p>
             </div>
+
+            <ResumeCard />
 
             <div className="stat-cards">
                 <div className="stat-card">

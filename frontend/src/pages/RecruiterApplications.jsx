@@ -3,11 +3,35 @@ import {
     getAllApplications,
     updateApplicationStatus,
 } from "../services/applicationService";
+import { downloadCandidateResume } from "../services/resumeService";
+import { FiDownload } from "react-icons/fi";
 
 function RecruiterApplications() {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    const handleDownloadResume = async (application) => {
+    try {
+        const blob = await downloadCandidateResume(application.id);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `${application.candidateName}-resume`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error(error);
+
+        if (error.response?.status === 404) {
+            alert("This candidate hasn't uploaded a resume yet.");
+        } else {
+            alert("Failed to download resume.");
+        }
+    }
+};
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -114,40 +138,53 @@ function RecruiterApplications() {
 
                             <div className="candidate-details">
 
-                                <div className="candidate-detail">
-                                    <span className="detail-label">
-                                        Candidate
-                                    </span>
-                                    <strong>
-                                        {application.candidateName}
-                                    </strong>
-                                </div>
-
-                                <div className="candidate-detail">
-                                    <span className="detail-label">
-                                        Email
-                                    </span>
-                                    <strong>
-                                        {application.candidateEmail}
-                                    </strong>
-                                </div>
-
-                                <div className="candidate-detail">
-                                    <span className="detail-label">
-                                        Applied On
-                                    </span>
-                                    <strong>
-                                        {new Date(
-                                            application.appliedAt
-                                        ).toLocaleDateString("en-IN", {
-                                            day: "2-digit",
-                                            month: "short",
-                                            year: "numeric",
-                                        })}
-                                    </strong>
-                                </div>
-
+                            <div className="candidate-detail">
+                                <span className="detail-label">
+                                    Candidate
+                                </span>
+                                <strong>
+                                    {application.candidateName}
+                                </strong>
                             </div>
+
+                            <div className="candidate-detail">
+                                <span className="detail-label">
+                                    Email
+                                </span>
+                                <strong>
+                                    {application.candidateEmail}
+                                </strong>
+                            </div>
+
+                            <div className="candidate-detail">
+                                <span className="detail-label">
+                                    Applied On
+                                </span>
+                                <strong>
+                                    {new Date(
+                                        application.appliedAt
+                                    ).toLocaleDateString("en-IN", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
+                                </strong>
+                            </div>
+
+                            <div className="candidate-detail">
+                                <span className="detail-label">
+                                    Resume
+                                </span>
+                                <button
+                                    type="button"
+                                    className="resume-download-link"
+                                    onClick={() => handleDownloadResume(application)}
+                                >
+                                    <FiDownload size={13} /> Download
+                                </button>
+                            </div>
+
+                        </div>
 
                             <div className="status-section">
 
