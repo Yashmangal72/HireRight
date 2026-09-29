@@ -83,30 +83,30 @@ function CandidateDashboard() {
                     </div>
                 </div>
 
-                <div className="stat-card">
-                    <div className="stat-icon hired">
-                        <FiCheckCircle size={20} />
+                                    <div className="stat-card">
+                        <div className="stat-icon hired">
+                            <FiCheckCircle size={20} />
+                        </div>
+                        <div>
+                            <span className="stat-number">
+                                {data.hiredCount}
+                            </span>
+                            <span className="stat-label">Hired</span>
+                        </div>
                     </div>
-                    <div>
-                        <span className="stat-number">
-                            {data.hiredCount}
-                        </span>
-                        <span className="stat-label">Hired</span>
-                    </div>
-                </div>
-            </div>
 
-            <div className="stat-card">
-                <div className="stat-icon saved">
-                    <FiBookmark size={20} />
+                    <div className="stat-card">
+                        <div className="stat-icon saved">
+                            <FiBookmark size={20} />
+                        </div>
+                        <div>
+                            <span className="stat-number">
+                                {data.savedJobsCount}
+                            </span>
+                            <span className="stat-label">Saved Jobs</span>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <span className="stat-number">
-                        {data.savedJobsCount}
-                    </span>
-                    <span className="stat-label">Saved Jobs</span>
-                </div>
-            </div>
 
             <div className="dashboard-columns">
 
