@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMyApplications } from "../services/applicationService";
+import StatusStepper from "../components/StatusStepper";
 
 function MyApplications() {
     const [applications, setApplications] = useState([]);
@@ -63,7 +64,6 @@ function MyApplications() {
                         >
 
                             <div className="application-header">
-
                                 <div>
                                     <h2>
                                         {application.jobTitle}
@@ -73,19 +73,13 @@ function MyApplications() {
                                         Application ID: #{application.id}
                                     </p>
                                 </div>
-
-                                <span
-                                    className={`status-badge status-${application.status.toLowerCase()}`}
-                                >
-                                    {application.status}
-                                </span>
-
                             </div>
 
                             <div className="application-divider"></div>
 
-                            <div className="application-info">
+                            <StatusStepper status={application.status} />
 
+                            <div className="application-info">
                                 <p>
                                     <strong>Applied On:</strong>{" "}
                                     {new Date(
@@ -96,7 +90,6 @@ function MyApplications() {
                                         year: "numeric",
                                     })}
                                 </p>
-
                             </div>
 
                         </div>
