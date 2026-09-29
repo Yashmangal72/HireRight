@@ -8,6 +8,7 @@ import com.yash.hireright.entity.Job;
 import com.yash.hireright.mapper.JobMapper;
 import com.yash.hireright.repository.ApplicationRepository;
 import com.yash.hireright.repository.JobRepository;
+import com.yash.hireright.repository.SavedJobRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import com.yash.hireright.dto.RecruiterDashboardResponse;
@@ -20,15 +21,18 @@ public class DashboardService {
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
     private final JobMapper jobMapper;
+    private final SavedJobRepository savedJobRepository;
 
     public DashboardService(
             ApplicationRepository applicationRepository,
             JobRepository jobRepository,
-            JobMapper jobMapper
+            JobMapper jobMapper,
+            SavedJobRepository savedJobRepository
     ) {
         this.applicationRepository = applicationRepository;
         this.jobRepository = jobRepository;
         this.jobMapper = jobMapper;
+        this.savedJobRepository = savedJobRepository;
     }
 
     public CandidateDashboardResponse getCandidateDashboard(Authentication authentication) {
@@ -64,6 +68,10 @@ public class DashboardService {
 
         response.setRecommendedJobs(
                 recommended.stream().map(jobMapper::toResponse).toList()
+        );
+
+        response.setSavedJobsCount(
+                savedJobRepository.countByCandidate_Email(email)
         );
 
         return response;

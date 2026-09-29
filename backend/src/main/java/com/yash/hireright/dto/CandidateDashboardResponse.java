@@ -14,6 +14,7 @@ public class CandidateDashboardResponse {
     private long hiredCount;
     private List<ApplicationResponse> recentApplications;
     private List<JobResponse> recommendedJobs;
+    private long savedJobsCount;
 
     public CandidateDashboardResponse() {
     }
