@@ -38,6 +38,8 @@ public class Application {
     @Column(nullable = false)
     private LocalDateTime appliedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String coverLetter;
 
     public Application() {
     }

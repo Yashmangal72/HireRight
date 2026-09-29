@@ -75,6 +75,7 @@ public class ApplicationService {
         application.setJob(job);
         application.setStatus(ApplicationStatus.APPLIED);
         application.setAppliedAt(LocalDateTime.now());
+        application.setCoverLetter(request.getCoverLetter());
 
         Application savedApplication =
                 applicationRepository.save(application);
@@ -168,6 +169,7 @@ public class ApplicationService {
 
         response.setStatus(application.getStatus());
         response.setAppliedAt(application.getAppliedAt());
+        response.setCoverLetter(application.getCoverLetter());
 
         return response;
     }

@@ -18,6 +18,7 @@ public class ApplicationResponse {
     private String candidateEmail;
     private ApplicationStatus status;
     private LocalDateTime appliedAt;
+    private String coverLetter;
 
 
     public ApplicationResponse() {
