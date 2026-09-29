@@ -10,8 +10,11 @@ function RecruiterApplications() {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [resumeError, setResumeError] = useState("");
 
     const handleDownloadResume = async (application) => {
+    setResumeError("");
+
     try {
         const blob = await downloadCandidateResume(application.id);
         const url = window.URL.createObjectURL(blob);
@@ -26,10 +29,14 @@ function RecruiterApplications() {
         console.error(error);
 
         if (error.response?.status === 404) {
-            alert("This candidate hasn't uploaded a resume yet.");
+            setResumeError(
+                `${application.candidateName} hasn't uploaded a resume yet.`
+            );
         } else {
-            alert("Failed to download resume.");
+            setResumeError("Failed to download resume.");
         }
+
+        setTimeout(() => setResumeError(""), 4000);
     }
 };
 
@@ -97,6 +104,12 @@ function RecruiterApplications() {
                 <h1>Applications</h1>
                 <p>Review candidates and manage application status</p>
             </div>
+
+            {resumeError && (
+                <p className="resume-toast-error">
+                    {resumeError}
+                </p>
+            )}
 
             {applications.length === 0 ? (
                 <div className="empty-state">
