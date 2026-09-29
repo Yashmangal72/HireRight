@@ -15,4 +15,6 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
             Pageable pageable
     );
     List<Job> findByRecruiterEmail(String email);
+
+    List<Job> findTop4ByOrderByCreatedAtDesc();
 }
