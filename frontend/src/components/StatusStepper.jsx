@@ -22,12 +22,13 @@ function StatusStepper({ status, compact }) {
     }
 
     const currentIndex = STEPS.indexOf(status);
+    const isFinal = status === "HIRED";
 
     return (
         <div className={"status-stepper" + (compact ? " compact" : "")}>
             {STEPS.map((step, index) => {
-                const isComplete = index < currentIndex;
-                const isCurrent = index === currentIndex;
+                const isComplete = index < currentIndex || (isFinal && index === currentIndex);
+                const isCurrent = index === currentIndex && !isFinal;
 
                 return (
                     <div className="stepper-step" key={step}>
