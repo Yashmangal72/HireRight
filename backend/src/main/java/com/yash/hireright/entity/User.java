@@ -28,6 +28,14 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Lob
+    @Column(name = "resume_data", columnDefinition = "LONGBLOB")
+    private byte[] resumeData;
+
+    private String resumeFilename;
+
+    private String resumeContentType;
+
     public User(){
     }
 }
