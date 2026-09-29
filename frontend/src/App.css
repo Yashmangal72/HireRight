@@ -1827,6 +1827,10 @@ a.dashboard-list-item:hover {
   display: none;
 }
 
+.dashboard-list-item strong {
+  display: block;
+}
+
 @media (max-width: 768px) {
   .stat-cards {
     grid-template-columns: 1fr;
