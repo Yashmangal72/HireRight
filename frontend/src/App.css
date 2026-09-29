@@ -1651,6 +1651,193 @@ body.dark-theme .status-interview {
 }
 
 /* ============================================================
+   CANDIDATE DASHBOARD
+   ============================================================ */
+.dashboard-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon.applications {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+.stat-icon.interviews {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.stat-icon.hired {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.dashboard-column {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.dashboard-column-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.dashboard-column-header a {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.dashboard-column-header a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+.dashboard-empty {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  padding: 1rem 0;
+}
+
+.dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dashboard-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border-light);
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+a.dashboard-list-item:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-light);
+}
+
+.dashboard-list-item strong {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.dashboard-item-meta {
+  margin-top: 0.125rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Compact stepper (used inside dashboard list rows) */
+.status-stepper.compact {
+  gap: 0.25rem;
+}
+
+.status-stepper.compact .stepper-label {
+  display: none;
+}
+
+.status-stepper.compact .stepper-node-wrapper {
+  gap: 0;
+}
+
+.status-stepper.compact .stepper-line {
+  margin-bottom: 0;
+  width: 16px;
+  flex: none;
+}
+
+.status-stepper.compact .stepper-node {
+  width: 16px;
+  height: 16px;
+}
+
+.status-stepper.compact.status-stepper-rejected .stepper-rejected-label {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .stat-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */
 @media (max-width: 768px) {

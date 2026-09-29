@@ -11,6 +11,7 @@ import EditJob from "./pages/EditJob";
 import RecruiterApplications from "./pages/RecruiterApplications";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
+import CandidateDashboard from "./pages/CandidateDashboard";
 
 function App() {
     return (
@@ -31,6 +32,15 @@ function App() {
                     element={
                         <ProtectedRoute role="CANDIDATE">
                             <MyApplications />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/dashboard"
+                    element={
+                        <ProtectedRoute role="CANDIDATE">
+                            <CandidateDashboard />
                         </ProtectedRoute>
                     }
                 />

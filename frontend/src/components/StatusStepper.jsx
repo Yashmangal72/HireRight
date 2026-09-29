@@ -2,12 +2,17 @@ import { FiCheck, FiX } from "react-icons/fi";
 
 const STEPS = ["APPLIED", "SHORTLISTED", "INTERVIEW", "HIRED"];
 
-function StatusStepper({ status }) {
+function StatusStepper({ status, compact }) {
     if (status === "REJECTED") {
         return (
-            <div className="status-stepper status-stepper-rejected">
+            <div
+                className={
+                    "status-stepper status-stepper-rejected" +
+                    (compact ? " compact" : "")
+                }
+            >
                 <div className="stepper-node rejected">
-                    <FiX size={14} />
+                    <FiX size={compact ? 11 : 14} />
                 </div>
                 <span className="stepper-rejected-label">
                     Application Rejected
@@ -19,7 +24,7 @@ function StatusStepper({ status }) {
     const currentIndex = STEPS.indexOf(status);
 
     return (
-        <div className="status-stepper">
+        <div className={"status-stepper" + (compact ? " compact" : "")}>
             {STEPS.map((step, index) => {
                 const isComplete = index < currentIndex;
                 const isCurrent = index === currentIndex;

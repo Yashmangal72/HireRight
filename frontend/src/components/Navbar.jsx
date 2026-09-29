@@ -28,12 +28,15 @@ function Navbar() {
                     </Link>
 
                     {isAuthenticated && role === "CANDIDATE" && (
-                        <Link
-                            to="/applications"
-                            className="navbar-link"
-                        >
-                            My Applications
-                        </Link>
+                        <>
+                            <Link to="/dashboard" className="navbar-link">
+                                Dashboard
+                            </Link>
+
+                            <Link to="/applications" className="navbar-link">
+                                My Applications
+                            </Link>
+                        </>
                     )}
 
                     {isAuthenticated && role === "RECRUITER" && (
