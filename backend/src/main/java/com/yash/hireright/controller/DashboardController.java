@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.yash.hireright.dto.RecruiterDashboardResponse;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -26,6 +27,16 @@ public class DashboardController {
     ) {
         return ResponseEntity.ok(
                 dashboardService.getCandidateDashboard(authentication)
+        );
+    }
+
+    @PreAuthorize("hasRole('RECRUITER')")
+    @GetMapping("/recruiter")
+    public ResponseEntity<RecruiterDashboardResponse> getRecruiterDashboard(
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(
+                dashboardService.getRecruiterDashboard(authentication)
         );
     }
 }

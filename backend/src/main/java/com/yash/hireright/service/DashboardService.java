@@ -10,6 +10,7 @@ import com.yash.hireright.repository.ApplicationRepository;
 import com.yash.hireright.repository.JobRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import com.yash.hireright.dto.RecruiterDashboardResponse;
 
 import java.util.List;
 
@@ -80,6 +81,42 @@ public class DashboardService {
         response.setCandidateEmail(application.getCandidate().getEmail());
         response.setStatus(application.getStatus());
         response.setAppliedAt(application.getAppliedAt());
+
+        return response;
+    }
+
+    public RecruiterDashboardResponse getRecruiterDashboard(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        RecruiterDashboardResponse response = new RecruiterDashboardResponse();
+
+        response.setJobsCount(
+                jobRepository.countByRecruiterEmail(email)
+        );
+
+        response.setApplicationsCount(
+                applicationRepository.countByJob_Recruiter_Email(email)
+        );
+
+        response.setShortlistedCount(
+                applicationRepository.countByJob_Recruiter_EmailAndStatus(
+                        email, ApplicationStatus.SHORTLISTED
+                )
+        );
+
+        response.setHiredCount(
+                applicationRepository.countByJob_Recruiter_EmailAndStatus(
+                        email, ApplicationStatus.HIRED
+                )
+        );
+
+        List<Application> recent =
+                applicationRepository.findTop4ByJob_Recruiter_EmailOrderByAppliedAtDesc(email);
+
+        response.setRecentApplications(
+                recent.stream().map(this::mapApplication).toList()
+        );
 
         return response;
     }
