@@ -13,6 +13,8 @@ function Navbar() {
         navigate("/login");
     };
 
+    const dashboardPath = role === "RECRUITER" ? "/recruiter/overview" : "/dashboard";
+
     return (
         <nav className="navbar">
             <div className="navbar-container">
@@ -27,64 +29,19 @@ function Navbar() {
                         Jobs
                     </Link>
 
-                    {isAuthenticated && role === "CANDIDATE" && (
-                        <>
-                            <Link to="/dashboard" className="navbar-link">
-                                Dashboard
-                            </Link>
-
-                            <Link to="/saved-jobs" className="navbar-link">
-                                Saved Jobs
-                            </Link>
-
-                            <Link to="/applications" className="navbar-link">
-                                My Applications
-                            </Link>
-                        </>
-                    )}
-
-                    {isAuthenticated && role === "RECRUITER" && (
-                        <>
-
-                            <Link to="/recruiter/overview" className="navbar-link">
-                                Overview
-                            </Link>
-
-                            <Link to="/recruiter"
-                                className="navbar-link"
-                            >
-                                Post Job
-                            </Link>
-
-                            <Link
-                                to="/my-jobs"
-                                className="navbar-link"
-                            >
-                                My Jobs
-                            </Link>
-
-                            <Link
-                                to="/recruiter/applications"
-                                className="navbar-link"
-                            >
-                                Applications
-                            </Link>
-                        </>
+                    {isAuthenticated && (
+                        <Link to={dashboardPath} className="navbar-link">
+                            Dashboard
+                        </Link>
                     )}
 
                     {!isAuthenticated ? (
                         <>
-                            <Link
-                                to="/login"
-                                className="navbar-button"
-                            >
+                            <Link to="/login" className="navbar-button">
                                 Login
                             </Link>
 
-                            <Link
-                                to="/register"
-                                className="navbar-button navbar-register"
-                            >
+                            <Link to="/register" className="navbar-button navbar-register">
                                 Register
                             </Link>
                         </>
