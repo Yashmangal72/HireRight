@@ -15,6 +15,7 @@ function RecruiterApplications() {
     const [resumeError, setResumeError] = useState("");
     const [modalApplication, setModalApplication] = useState(null);
     const [interviews, setInterviews] = useState({});
+    const [activeTab, setActiveTab] = useState("ALL");
 
 
     const handleDownloadResume = async (application) => {
@@ -107,6 +108,29 @@ function RecruiterApplications() {
         }
     };
 
+    const statusCounts = applications.reduce(
+        (counts, application) => {
+            counts.ALL += 1;
+            counts[application.status] = (counts[application.status] || 0) + 1;
+            return counts;
+        },
+        { ALL: 0 }
+    );
+
+    const filteredApplications =
+        activeTab === "ALL"
+            ? applications
+            : applications.filter((application) => application.status === activeTab);
+
+    const tabs = [
+        { key: "ALL", label: "All" },
+        { key: "APPLIED", label: "Applied" },
+        { key: "SHORTLISTED", label: "Shortlisted" },
+        { key: "INTERVIEW", label: "Interview" },
+        { key: "HIRED", label: "Hired" },
+        { key: "REJECTED", label: "Rejected" },
+    ];
+
     if (loading) {
         return (
             <div className="page-center">
@@ -137,6 +161,26 @@ function RecruiterApplications() {
                 </p>
             )}
 
+            {applications.length > 0 && (
+                <div className="status-tabs">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab.key}
+                            type="button"
+                            className={
+                                "status-tab" + (activeTab === tab.key ? " active" : "")
+                            }
+                            onClick={() => setActiveTab(tab.key)}
+                        >
+                            {tab.label}
+                            <span className="status-tab-count">
+                                {statusCounts[tab.key] || 0}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
+
             {applications.length === 0 ? (
                 <div className="empty-state">
                     <h2>No Applications Yet</h2>
@@ -144,10 +188,17 @@ function RecruiterApplications() {
                         You haven't received any applications for your jobs.
                     </p>
                 </div>
+            ) : filteredApplications.length === 0 ? (
+                <div className="empty-state">
+                    <h2>No Applications Here</h2>
+                    <p>
+                        You don't have any applications with this status.
+                    </p>
+                </div>
             ) : (
                 <div className="recruiter-applications-list">
 
-                    {applications.map((application) => (
+                    {filteredApplications.map((application) => (
                         <div
                             className="recruiter-application-card"
                             key={application.id}
