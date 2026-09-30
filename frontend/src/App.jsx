@@ -15,6 +15,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Register from "./pages/Register";
 import CandidateDashboard from "./pages/CandidateDashboard";
 import SavedJobs from "./pages/SavedJobs";
+import Profile from "./pages/Profile";
 
 function App() {
     return (
@@ -59,6 +60,17 @@ function App() {
                             <Navbar />
                             <Register />
                         </>
+                    }
+                />
+
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute>
+                            <AppLayout>
+                                <Profile />
+                            </AppLayout>
+                        </ProtectedRoute>
                     }
                 />
 
