@@ -2552,6 +2552,62 @@ body.dark-theme .stat-icon.shortlisted {
 }
 
 /* ============================================================
+   STATUS TABS
+   ============================================================ */
+.status-tabs {
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+
+.status-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+.status-tab:hover {
+  background-color: var(--color-border-light);
+  color: var(--color-text-primary);
+}
+
+.status-tab.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #ffffff;
+}
+
+.status-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 0.375rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-light);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.status-tab.active .status-tab-count {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */
 @media (max-width: 768px) {

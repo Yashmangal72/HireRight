@@ -9,6 +9,7 @@ function MyApplications() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [interviews, setInterviews] = useState({});
+    const [activeTab, setActiveTab] = useState("ALL");
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -51,6 +52,29 @@ function MyApplications() {
         fetchApplications();
     }, []);
 
+    const statusCounts = applications.reduce(
+        (counts, application) => {
+            counts.ALL += 1;
+            counts[application.status] = (counts[application.status] || 0) + 1;
+            return counts;
+        },
+        { ALL: 0 }
+    );
+
+    const filteredApplications =
+        activeTab === "ALL"
+            ? applications
+            : applications.filter((application) => application.status === activeTab);
+
+    const tabs = [
+        { key: "ALL", label: "All" },
+        { key: "APPLIED", label: "Applied" },
+        { key: "SHORTLISTED", label: "Shortlisted" },
+        { key: "INTERVIEW", label: "Interview" },
+        { key: "HIRED", label: "Hired" },
+        { key: "REJECTED", label: "Rejected" },
+    ];
+
     if (loading) {
         return (
             <div className="page-center">
@@ -67,13 +91,33 @@ function MyApplications() {
         );
     }
 
-    return (
+        return (
         <div className="applications-page">
 
             <div className="page-heading">
                 <h1>My Applications</h1>
                 <p>Track the status of your job applications</p>
             </div>
+
+            {applications.length > 0 && (
+                <div className="status-tabs">
+                    {tabs.map((tab) => (
+                        <button
+                            key={tab.key}
+                            type="button"
+                            className={
+                                "status-tab" + (activeTab === tab.key ? " active" : "")
+                            }
+                            onClick={() => setActiveTab(tab.key)}
+                        >
+                            {tab.label}
+                            <span className="status-tab-count">
+                                {statusCounts[tab.key] || 0}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {applications.length === 0 ? (
                 <div className="empty-state">
@@ -82,10 +126,17 @@ function MyApplications() {
                         You haven't applied for any jobs yet.
                     </p>
                 </div>
+            ) : filteredApplications.length === 0 ? (
+                <div className="empty-state">
+                    <h2>No Applications Here</h2>
+                    <p>
+                        You don't have any applications with this status.
+                    </p>
+                </div>
             ) : (
                 <div className="applications-list">
 
-                    {applications.map((application) => (
+                    {filteredApplications.map((application) => (
                         <div
                             className="application-card"
                             key={application.id}
