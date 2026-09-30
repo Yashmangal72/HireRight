@@ -2061,6 +2061,144 @@ body.dark-theme .stat-icon.shortlisted {
   white-space: pre-wrap;
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1000;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.modal-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  transition: all var(--transition);
+}
+
+.modal-close:hover {
+  background-color: var(--color-border-light);
+  color: var(--color-text-primary);
+}
+
+.modal-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.modal-subtitle strong {
+  color: var(--color-text-primary);
+}
+
+.modal-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.schedule-interview-btn {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.interview-details {
+  margin-top: 1rem;
+  padding: 1rem 1.125rem;
+  background-color: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+
+.interview-details-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 0.75rem;
+}
+
+.interview-details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.interview-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.interview-detail-item.full-width {
+  align-items: flex-start;
+}
+
+.interview-detail-item a {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.interview-detail-item a:hover {
+  text-decoration: underline;
+}
+
+.interview-type-tag {
+  display: inline-flex;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  color: var(--color-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
 /* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */

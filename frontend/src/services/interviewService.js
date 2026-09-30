@@ -1,0 +1,16 @@
+import api from "./api";
+
+export const scheduleInterview = async (applicationId, interviewData) => {
+    const response = await api.post(
+        `/applications/${applicationId}/interview`,
+        interviewData
+    );
+    return response.data;
+};
+
+export const getInterview = async (applicationId) => {
+    const response = await api.get(
+        `/applications/${applicationId}/interview`
+    );
+    return response.data;
+};

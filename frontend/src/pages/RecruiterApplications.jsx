@@ -4,13 +4,18 @@ import {
     updateApplicationStatus,
 } from "../services/applicationService";
 import { downloadCandidateResume } from "../services/resumeService";
-import { FiDownload } from "react-icons/fi";
+import { FiDownload, FiCalendar } from "react-icons/fi";
+import ScheduleInterviewModal from "../components/ScheduleInterviewModal";
+import { getInterview } from "../services/interviewService";
 
 function RecruiterApplications() {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [resumeError, setResumeError] = useState("");
+    const [modalApplication, setModalApplication] = useState(null);
+    const [interviews, setInterviews] = useState({});
+
 
     const handleDownloadResume = async (application) => {
     setResumeError("");
@@ -39,6 +44,27 @@ function RecruiterApplications() {
         setTimeout(() => setResumeError(""), 4000);
     }
 };
+
+    const openScheduleModal = async (application) => {
+        try {
+            const existing = await getInterview(application.id);
+            setInterviews((current) => ({
+                ...current,
+                [application.id]: existing,
+            }));
+        } catch (error) {
+            // 404 is expected when no interview exists yet — not an error case
+        }
+
+        setModalApplication(application);
+    };
+
+    const handleInterviewScheduled = (interview) => {
+        setInterviews((current) => ({
+            ...current,
+            [interview.applicationId]: interview,
+        }));
+    };
 
     useEffect(() => {
         const fetchApplications = async () => {
@@ -206,6 +232,17 @@ function RecruiterApplications() {
                                 </div>
                             )}
 
+                            <button
+                                type="button"
+                                className="secondary-button schedule-interview-btn"
+                                onClick={() => openScheduleModal(application)}
+                            >
+                                <FiCalendar size={14} />{" "}
+                                {interviews[application.id]
+                                    ? "Reschedule Interview"
+                                    : "Schedule Interview"}
+                            </button>
+
                             <div className="status-section">
 
                                 <label htmlFor={`status-${application.id}`}>
@@ -249,6 +286,15 @@ function RecruiterApplications() {
                     ))}
 
                 </div>
+            )}
+
+            {modalApplication && (
+                <ScheduleInterviewModal
+                    application={modalApplication}
+                    existingInterview={interviews[modalApplication.id]}
+                    onClose={() => setModalApplication(null)}
+                    onScheduled={handleInterviewScheduled}
+                />
             )}
 
         </div>
