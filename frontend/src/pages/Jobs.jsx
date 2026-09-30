@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { getJobs } from "../services/jobService";
 import JobCard from "../components/JobCard";
+import { useSearchParams } from "react-router-dom";
 
 function Jobs() {
+    const [searchParams] = useSearchParams();
+
     const [jobs, setJobs] = useState([]);
 
-    const [keyword, setKeyword] = useState("");
+    const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
     const [location, setLocation] = useState("");
     const [employmentType, setEmploymentType] = useState("");
     const [experienceLevel, setExperienceLevel] = useState("");

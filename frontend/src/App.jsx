@@ -16,15 +16,25 @@ import Register from "./pages/Register";
 import CandidateDashboard from "./pages/CandidateDashboard";
 import SavedJobs from "./pages/SavedJobs";
 import Profile from "./pages/Profile";
+import Landing from "./pages/Landing";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
 
-                {/* ---- Public / top-navbar pages ---- */}
                 <Route
                     path="/"
+                    element={
+                        <>
+                            <Navbar />
+                            <Landing />
+                        </>
+                    }
+                />
+
+                <Route
+                    path="/jobs"
                     element={
                         <>
                             <Navbar />

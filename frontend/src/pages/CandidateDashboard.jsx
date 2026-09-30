@@ -155,7 +155,7 @@ function CandidateDashboard() {
                 <div className="dashboard-column">
                     <div className="dashboard-column-header">
                         <h2>Recommended Jobs</h2>
-                        <Link to="/">View All</Link>
+                        <Link to="/jobs">View All</Link>
                     </div>
 
                     {data.recommendedJobs.length === 0 ? (

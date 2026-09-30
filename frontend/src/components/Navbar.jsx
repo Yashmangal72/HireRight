@@ -25,7 +25,7 @@ function Navbar() {
 
                 <div className="navbar-links">
 
-                    <Link to="/" className="navbar-link">
+                    <Link to="/jobs" className="navbar-link">
                         Jobs
                     </Link>
 
