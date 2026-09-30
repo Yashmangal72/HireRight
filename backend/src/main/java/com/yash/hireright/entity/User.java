@@ -28,6 +28,19 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    private String phone;
+
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    private String location;
+
+    private String skills;
+
+    private String companyName;
+
+    private String companyWebsite;
+
     @Lob
     @Column(name = "resume_data", columnDefinition = "LONGBLOB")
     private byte[] resumeData;
