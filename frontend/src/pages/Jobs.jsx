@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getJobs } from "../services/jobService";
 import JobCard from "../components/JobCard";
 import { useSearchParams } from "react-router-dom";
+import { FiSearch, FiX } from "react-icons/fi";
 
 function Jobs() {
     const [searchParams] = useSearchParams();
@@ -95,141 +96,171 @@ function Jobs() {
         }, 0);
     };
 
+    const activeFilterCount = [
+        location,
+        employmentType,
+        experienceLevel,
+        minSalary,
+        maxSalary,
+    ].filter(Boolean).length;
+
     return (
-        <div className="jobs-page">
+        <div className="jobs-page-layout">
 
-            <div className="jobs-header">
-                <h1 className="jobs-title">Available Jobs</h1>
-                <p className="jobs-subtitle">
-                    Find your next opportunity
-                </p>
-            </div>
+            <aside className="jobs-filter-sidebar">
+                <div className="jobs-filter-header">
+                    <h2>Filters</h2>
+                    {activeFilterCount > 0 && (
+                        <button
+                            type="button"
+                            className="jobs-filter-clear"
+                            onClick={handleReset}
+                        >
+                            <FiX size={14} /> Clear
+                        </button>
+                    )}
+                </div>
 
-            <form className="job-filters" onSubmit={handleSearch}>
+                <form onSubmit={handleSearch} className="jobs-filter-form">
 
-                <div className="filter-row">
+                    <div className="filter-group">
+                        <label>Location</label>
+                        <input
+                            type="text"
+                            placeholder="e.g. Mumbai"
+                            value={location}
+                            onChange={(e) => setLocation(e.target.value)}
+                        />
+                    </div>
 
+                    <div className="filter-group">
+                        <label>Employment Type</label>
+                        <select
+                            value={employmentType}
+                            onChange={(e) => setEmploymentType(e.target.value)}
+                        >
+                            <option value="">All Types</option>
+                            <option value="FULL_TIME">Full Time</option>
+                            <option value="PART_TIME">Part Time</option>
+                            <option value="CONTRACT">Contract</option>
+                            <option value="INTERNSHIP">Internship</option>
+                        </select>
+                    </div>
+
+                    <div className="filter-group">
+                        <label>Experience Level</label>
+                        <select
+                            value={experienceLevel}
+                            onChange={(e) => setExperienceLevel(e.target.value)}
+                        >
+                            <option value="">All Levels</option>
+                            <option value="ENTRY_LEVEL">Entry Level</option>
+                            <option value="MID_LEVEL">Mid Level</option>
+                            <option value="SENIOR_LEVEL">Senior Level</option>
+                        </select>
+                    </div>
+
+                    <div className="filter-group">
+                        <label>Minimum Salary</label>
+                        <input
+                            type="number"
+                            placeholder="e.g. 30000"
+                            value={minSalary}
+                            onChange={(e) => setMinSalary(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="filter-group">
+                        <label>Maximum Salary</label>
+                        <input
+                            type="number"
+                            placeholder="e.g. 100000"
+                            value={maxSalary}
+                            onChange={(e) => setMaxSalary(e.target.value)}
+                        />
+                    </div>
+
+                    <button type="submit" className="jobs-filter-apply">
+                        Apply Filters
+                    </button>
+
+                </form>
+            </aside>
+
+            <div className="jobs-main">
+
+                <div className="jobs-header">
+                    <h1 className="jobs-title">Available Jobs</h1>
+                    <p className="jobs-subtitle">
+                        Find your next opportunity
+                    </p>
+                </div>
+
+                <form className="jobs-keyword-bar" onSubmit={handleSearch}>
+                    <FiSearch size={18} className="jobs-keyword-icon" />
                     <input
                         type="text"
-                        placeholder="Search jobs..."
+                        placeholder="Search jobs, skills or companies..."
                         value={keyword}
                         onChange={(e) => setKeyword(e.target.value)}
                     />
+                    <button type="submit">Search</button>
+                </form>
 
-                    <input
-                        type="text"
-                        placeholder="Location"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                    />
+                {loading && (
+                    <p className="jobs-status">
+                        Loading jobs...
+                    </p>
+                )}
 
-                    <select
-                        value={employmentType}
-                        onChange={(e) => setEmploymentType(e.target.value)}
-                    >
-                        <option value="">Employment Type</option>
-                        <option value="FULL_TIME">Full Time</option>
-                        <option value="PART_TIME">Part Time</option>
-                        <option value="CONTRACT">Contract</option>
-                        <option value="INTERNSHIP">Internship</option>
-                    </select>
+                {error && (
+                    <p className="jobs-error">
+                        {error}
+                    </p>
+                )}
 
-                    <select
-                        value={experienceLevel}
-                        onChange={(e) => setExperienceLevel(e.target.value)}
-                    >
-                        <option value="">Experience Level</option>
-                        <option value="ENTRY_LEVEL">Entry Level</option>
-                        <option value="MID_LEVEL">Mid Level</option>
-                        <option value="SENIOR_LEVEL">Senior Level</option>
-                    </select>
+                {!loading && !error && jobs.length === 0 && (
+                    <p className="jobs-status">
+                        No jobs found.
+                    </p>
+                )}
 
-                </div>
+                {!loading && !error && jobs.length > 0 && (
+                    <div className="jobs-list">
+                        {jobs.map((job) => (
+                            <JobCard
+                                key={job.id}
+                                job={job}
+                            />
+                        ))}
+                    </div>
+                )}
 
-                <div className="filter-row">
+                {!loading && !error && totalPages > 1 && (
+                    <div className="pagination">
 
-                    <input
-                        type="number"
-                        placeholder="Minimum Salary"
-                        value={minSalary}
-                        onChange={(e) => setMinSalary(e.target.value)}
-                    />
+                        <button
+                            disabled={page === 0}
+                            onClick={() => setPage(page - 1)}
+                        >
+                            Previous
+                        </button>
 
-                    <input
-                        type="number"
-                        placeholder="Maximum Salary"
-                        value={maxSalary}
-                        onChange={(e) => setMaxSalary(e.target.value)}
-                    />
+                        <span>
+                            Page {page + 1} of {totalPages}
+                        </span>
 
-                    <button type="submit">
-                        Search
-                    </button>
+                        <button
+                            disabled={page >= totalPages - 1}
+                            onClick={() => setPage(page + 1)}
+                        >
+                            Next
+                        </button>
 
-                    <button
-                        type="button"
-                        className="reset-btn"
-                        onClick={handleReset}
-                    >
-                        Reset
-                    </button>
+                    </div>
+                )}
 
-                </div>
-
-            </form>
-
-            {loading && (
-                <p className="jobs-status">
-                    Loading jobs...
-                </p>
-            )}
-
-            {error && (
-                <p className="jobs-error">
-                    {error}
-                </p>
-            )}
-
-            {!loading && !error && jobs.length === 0 && (
-                <p className="jobs-status">
-                    No jobs found.
-                </p>
-            )}
-
-            {!loading && !error && jobs.length > 0 && (
-                <div className="jobs-list">
-                    {jobs.map((job) => (
-                        <JobCard
-                            key={job.id}
-                            job={job}
-                        />
-                    ))}
-                </div>
-            )}
-
-            {!loading && !error && totalPages > 1 && (
-                <div className="pagination">
-
-                    <button
-                        disabled={page === 0}
-                        onClick={() => setPage(page - 1)}
-                    >
-                        Previous
-                    </button>
-
-                    <span>
-                        Page {page + 1} of {totalPages}
-                    </span>
-
-                    <button
-                        disabled={page >= totalPages - 1}
-                        onClick={() => setPage(page + 1)}
-                    >
-                        Next
-                    </button>
-
-                </div>
-            )}
+            </div>
 
         </div>
     );
