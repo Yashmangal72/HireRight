@@ -1,8 +1,9 @@
 import api from "./api";
 
-export const applyForJob = async (jobId) => {
+export const applyForJob = async (jobId, coverLetter) => {
     const response = await api.post("/applications", {
         jobId: jobId,
+        coverLetter: coverLetter,
     });
 
     return response.data;

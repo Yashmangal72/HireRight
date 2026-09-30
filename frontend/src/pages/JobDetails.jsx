@@ -11,12 +11,13 @@ function JobDetails() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [applyMessage, setApplyMessage] = useState("");
+    const [coverLetter, setCoverLetter] = useState("");
 
     const handleApply = async () => {
         setApplyMessage("");
 
         try {
-            const data = await applyForJob(job.id);
+            const data = await applyForJob(job.id, coverLetter);
 
             console.log("Application:", data);
             setApplyMessage("Application submitted successfully!");
@@ -90,6 +91,25 @@ function JobDetails() {
                 </section>
 
                 <div className="job-apply-section">
+
+                    <div className="cover-letter-group">
+                        <label htmlFor="coverLetter">
+                            Cover Letter <span className="optional-tag">(optional)</span>
+                        </label>
+
+                        <textarea
+                            id="coverLetter"
+                            value={coverLetter}
+                            onChange={(e) => setCoverLetter(e.target.value)}
+                            placeholder="Tell the recruiter why you're a good fit for this role..."
+                            rows="5"
+                            maxLength={2000}
+                        />
+
+                        <span className="char-count">
+                            {coverLetter.length}/2000
+                        </span>
+                    </div>
 
                     <button
                         className="apply-button"

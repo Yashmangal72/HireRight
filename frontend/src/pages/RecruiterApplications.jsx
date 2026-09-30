@@ -199,6 +199,13 @@ function RecruiterApplications() {
 
                         </div>
 
+                        {application.coverLetter && (
+                                <div className="cover-letter-display">
+                                    <span className="detail-label">Cover Letter</span>
+                                    <p>{application.coverLetter}</p>
+                                </div>
+                            )}
+
                             <div className="status-section">
 
                                 <label htmlFor={`status-${application.id}`}>
