@@ -17,6 +17,7 @@ import CandidateDashboard from "./pages/CandidateDashboard";
 import SavedJobs from "./pages/SavedJobs";
 import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
+import Candidates from "./pages/Candidates";
 
 function App() {
     return (
@@ -163,6 +164,17 @@ function App() {
                         <ProtectedRoute role="RECRUITER">
                             <AppLayout>
                                 <RecruiterApplications />
+                            </AppLayout>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/recruiter/candidates"
+                    element={
+                        <ProtectedRoute role="RECRUITER">
+                            <AppLayout>
+                                <Candidates />
                             </AppLayout>
                         </ProtectedRoute>
                     }

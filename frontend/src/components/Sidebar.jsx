@@ -7,6 +7,7 @@ import {
     FiPlusSquare,
     FiBriefcase,
     FiUsers,
+    FiUserCheck,
     FiUser,
     FiSettings,
     FiLogOut,
@@ -36,6 +37,7 @@ function Sidebar() {
         { to: "/recruiter", label: "Post Job", icon: <FiPlusSquare size={18} /> },
         { to: "/my-jobs", label: "My Jobs", icon: <FiBriefcase size={18} /> },
         { to: "/recruiter/applications", label: "Applications", icon: <FiUsers size={18} /> },
+        { to: "/recruiter/candidates", label: "Candidates", icon: <FiUserCheck size={18} /> },
     ];
 
     const links = role === "RECRUITER" ? recruiterLinks : candidateLinks;

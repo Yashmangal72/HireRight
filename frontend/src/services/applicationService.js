@@ -29,3 +29,8 @@ export const updateApplicationStatus = async (id, status) => {
 
     return response.data;
 };
+
+export const getCandidates = async () => {
+    const response = await api.get("/applications/candidates");
+    return response.data;
+};
