@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import AppLayout from "./components/AppLayout";
 import JobsPageWrapper from "./components/JobsPageWrapper";
-import JobDetails from "./pages/JobDetails";
+import JobDetailsPageWrapper from "./components/JobDetailsPageWrapper";
 import MyApplications from "./pages/MyApplications";
 import Login from "./pages/Login";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
@@ -43,10 +43,7 @@ function App() {
                 <Route
                     path="/jobs/:id"
                     element={
-                        <>
-                            <Navbar />
-                            <JobDetails />
-                        </>
+                        <JobDetailsPageWrapper />
                     }
                 />
 

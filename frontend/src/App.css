@@ -2921,9 +2921,9 @@ body.dark-theme .stat-icon.shortlisted {
    JOB DETAILS PAGE V2
    ============================================================ */
 .job-details-page-v2 {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 1400px;
+  padding: 2rem 2rem;
 }
 
 .back-to-jobs {
