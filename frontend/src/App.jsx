@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import AppLayout from "./components/AppLayout";
-import Jobs from "./pages/Jobs";
+import JobsPageWrapper from "./components/JobsPageWrapper";
 import JobDetails from "./pages/JobDetails";
 import MyApplications from "./pages/MyApplications";
 import Login from "./pages/Login";
@@ -36,10 +36,7 @@ function App() {
                 <Route
                     path="/jobs"
                     element={
-                        <>
-                            <Navbar />
-                            <Jobs />
-                        </>
+                        <JobsPageWrapper />
                     }
                 />
 
