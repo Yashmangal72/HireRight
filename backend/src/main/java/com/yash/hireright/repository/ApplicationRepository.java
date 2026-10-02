@@ -26,4 +26,6 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     long countByJob_Recruiter_EmailAndStatus(String email, ApplicationStatus status);
 
     List<Application> findTop4ByJob_Recruiter_EmailOrderByAppliedAtDesc(String email);
+
+    List<Application> findByJob_Recruiter_EmailOrderByAppliedAtDesc(String email);
 }

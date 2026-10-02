@@ -2,6 +2,7 @@ package com.yash.hireright.controller;
 
 import com.yash.hireright.dto.ApplicationRequest;
 import com.yash.hireright.dto.ApplicationResponse;
+import com.yash.hireright.dto.CandidateSummaryResponse;
 import com.yash.hireright.service.ApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -91,5 +92,15 @@ public class ApplicationController {
                 );
 
         return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasRole('RECRUITER')")
+    @GetMapping("/candidates")
+    public ResponseEntity<List<CandidateSummaryResponse>> getCandidates(
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(
+                applicationService.getCandidatesForRecruiter(authentication)
+        );
     }
 }

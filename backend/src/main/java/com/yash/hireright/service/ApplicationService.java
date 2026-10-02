@@ -2,6 +2,7 @@ package com.yash.hireright.service;
 
 import com.yash.hireright.dto.ApplicationRequest;
 import com.yash.hireright.dto.ApplicationResponse;
+import com.yash.hireright.dto.CandidateSummaryResponse;
 import com.yash.hireright.entity.Application;
 import com.yash.hireright.entity.ApplicationStatus;
 import com.yash.hireright.entity.Job;
@@ -15,6 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import com.yash.hireright.exception.ApplicationNotFoundException;
 import com.yash.hireright.exception.UnauthorizedException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -207,5 +211,44 @@ public class ApplicationService {
             }
         }
         return mapToResponse(application);
+    }
+
+    public List<CandidateSummaryResponse> getCandidatesForRecruiter(
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+
+        List<Application> applications =
+                applicationRepository.findByJob_Recruiter_EmailOrderByAppliedAtDesc(email);
+
+        Map<Long, CandidateSummaryResponse> candidateMap = new LinkedHashMap<>();
+
+        for (Application application : applications) {
+
+            Long candidateId = application.getCandidate().getId();
+
+            CandidateSummaryResponse existing = candidateMap.get(candidateId);
+
+            if (existing == null) {
+                CandidateSummaryResponse summary = new CandidateSummaryResponse();
+
+                summary.setCandidateId(candidateId);
+                summary.setCandidateName(application.getCandidate().getName());
+                summary.setCandidateEmail(application.getCandidate().getEmail());
+                summary.setSkills(application.getCandidate().getSkills());
+                summary.setLocation(application.getCandidate().getLocation());
+                summary.setLatestApplicationId(application.getId());
+                summary.setLatestJobTitle(application.getJob().getTitle());
+                summary.setLatestStatus(application.getStatus().name());
+                summary.setLatestAppliedAt(application.getAppliedAt());
+                summary.setTotalApplications(1);
+
+                candidateMap.put(candidateId, summary);
+            } else {
+                existing.setTotalApplications(existing.getTotalApplications() + 1);
+            }
+        }
+
+        return new ArrayList<>(candidateMap.values());
     }
 }
