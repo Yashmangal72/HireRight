@@ -10,6 +10,7 @@ import {
     FiUser,
     FiSettings,
     FiLogOut,
+    FiSearch,
 } from "react-icons/fi";
 
 function Sidebar() {
@@ -23,12 +24,14 @@ function Sidebar() {
     };
 
     const candidateLinks = [
+        { to: "/jobs", label: "Jobs", icon: <FiSearch size={18} /> },
         { to: "/dashboard", label: "Dashboard", icon: <FiGrid size={18} /> },
         { to: "/applications", label: "My Applications", icon: <FiFileText size={18} /> },
         { to: "/saved-jobs", label: "Saved Jobs", icon: <FiBookmark size={18} /> },
     ];
 
     const recruiterLinks = [
+        { to: "/jobs", label: "Jobs", icon: <FiSearch size={18} /> },
         { to: "/recruiter/overview", label: "Dashboard", icon: <FiGrid size={18} /> },
         { to: "/recruiter", label: "Post Job", icon: <FiPlusSquare size={18} /> },
         { to: "/my-jobs", label: "My Jobs", icon: <FiBriefcase size={18} /> },
