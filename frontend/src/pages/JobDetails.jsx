@@ -1,12 +1,59 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { getJobById } from "../services/jobService";
 import { applyForJob } from "../services/applicationService";
-import { FiMapPin, FiDollarSign, FiBriefcase, FiBarChart2 } from "react-icons/fi";
+import { saveJob, unsaveJob, getSavedJobStatus } from "../services/savedJobService";
+import { useAuth } from "../context/AuthContext";
+import {
+    FiArrowLeft,
+    FiMapPin,
+    FiBriefcase,
+    FiBarChart2,
+    FiDollarSign,
+    FiBookmark,
+    FiGlobe,
+    FiClock,
+} from "react-icons/fi";
 
+const LOGO_COLORS = ["#4f46e5", "#0d9488", "#db2777", "#d97706", "#0891b2", "#65a30d"];
+
+function getLogoColor(id) {
+    return LOGO_COLORS[id % LOGO_COLORS.length];
+}
+
+function timeAgo(dateString) {
+    const diffMs = Date.now() - new Date(dateString).getTime();
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (days <= 0) return "Posted today";
+    if (days === 1) return "Posted 1 day ago";
+    if (days < 7) return `Posted ${days} days ago`;
+
+    const weeks = Math.floor(days / 7);
+    if (weeks === 1) return "Posted 1 week ago";
+    return `Posted ${weeks} weeks ago`;
+}
+
+function BulletList({ text }) {
+    const lines = text
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+    if (lines.length === 0) return null;
+
+    return (
+        <ul className="job-bullet-list">
+            {lines.map((line, index) => (
+                <li key={index}>{line}</li>
+            ))}
+        </ul>
+    );
+}
 
 function JobDetails() {
     const { id } = useParams();
+    const { isAuthenticated, role } = useAuth();
 
     const [job, setJob] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -14,24 +61,7 @@ function JobDetails() {
     const [applyMessage, setApplyMessage] = useState("");
     const [coverLetter, setCoverLetter] = useState("");
     const [activeTab, setActiveTab] = useState("overview");
-
-    const handleApply = async () => {
-        setApplyMessage("");
-
-        try {
-            const data = await applyForJob(job.id, coverLetter);
-
-            console.log("Application:", data);
-            setApplyMessage("Application submitted successfully!");
-        } catch (error) {
-            console.error(error);
-
-            setApplyMessage(
-                error.response?.data?.message ||
-                "Failed to apply for job"
-            );
-        }
-    };
+    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         const fetchJob = async () => {
@@ -49,6 +79,43 @@ function JobDetails() {
         fetchJob();
     }, [id]);
 
+    useEffect(() => {
+        if (isAuthenticated && role === "CANDIDATE") {
+            getSavedJobStatus(id)
+                .then((data) => setSaved(data.saved))
+                .catch((error) => console.error(error));
+        }
+    }, [id, isAuthenticated, role]);
+
+    const handleToggleSave = async () => {
+        try {
+            if (saved) {
+                await unsaveJob(id);
+                setSaved(false);
+            } else {
+                await saveJob(id);
+                setSaved(true);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleApply = async () => {
+        setApplyMessage("");
+
+        try {
+            const data = await applyForJob(job.id, coverLetter);
+            console.log("Application:", data);
+            setApplyMessage("Application submitted successfully!");
+        } catch (error) {
+            console.error(error);
+            setApplyMessage(
+                error.response?.data?.message || "Failed to apply for job"
+            );
+        }
+    };
+
     if (loading) {
         return (
             <div className="page-center">
@@ -65,166 +132,163 @@ function JobDetails() {
         );
     }
 
+    const tabs = [
+        { key: "overview", label: "Overview", content: job.description },
+        { key: "requirements", label: "Requirements", content: job.requirements },
+        { key: "responsibilities", label: "Responsibilities", content: job.responsibilities },
+        { key: "benefits", label: "Benefits", content: job.benefits },
+    ].filter((tab) => tab.key === "overview" || tab.content);
+
     return (
-        <div className="job-details-page">
+        <div className="job-details-page-v2">
 
-            <div className="job-details-card">
+            <Link to="/jobs" className="back-to-jobs">
+                <FiArrowLeft size={15} /> Back to Jobs
+            </Link>
 
-                <div className="job-details-header">
-                    <h1>{job.title}</h1>
-
-                    <p className="job-details-location">
-                        <FiMapPin size={15} /> {job.location}
-                    </p>
+            <div className="job-details-header-card">
+                <div className="job-details-header-main">
+                    <div
+                        className="job-logo job-logo-lg"
+                        style={{ backgroundColor: getLogoColor(job.id) }}
+                    >
+                        {(job.companyName || job.title)?.charAt(0).toUpperCase()}
                     </div>
 
-                    <div className="job-details-meta">
-                        <span className="salary"><FiDollarSign size={14} /> ₹{job.salary}</span>
-                        <span><FiBriefcase size={14} /> {job.employmentType}</span>
-                        <span><FiBarChart2 size={14} /> {job.experienceLevel}</span>
+                    <div>
+                        <h1>{job.title}</h1>
+                        {job.companyName && (
+                            <p className="job-company-name">{job.companyName}</p>
+                        )}
+                        <div className="job-header-meta">
+                            <span><FiMapPin size={13} /> {job.location}</span>
+                            <span><FiBriefcase size={13} /> {job.employmentType}</span>
+                            {job.createdAt && (
+                                <span><FiClock size={13} /> {timeAgo(job.createdAt)}</span>
+                            )}
+                        </div>
                     </div>
+                </div>
 
-                <div className="job-details-divider"></div>
-
-                    <div className="job-tabs">
+                <div className="job-header-actions">
+                    {isAuthenticated && role === "CANDIDATE" && (
                         <button
                             type="button"
-                            className={"job-tab" + (activeTab === "overview" ? " active" : "")}
-                            onClick={() => setActiveTab("overview")}
+                            className={"bookmark-button" + (saved ? " saved" : "")}
+                            onClick={handleToggleSave}
+                            aria-label={saved ? "Remove from saved jobs" : "Save job"}
                         >
-                            Overview
+                            <FiBookmark size={18} fill={saved ? "currentColor" : "none"} />
                         </button>
+                    )}
 
-                        {job.requirements && (
-                            <button
-                                type="button"
-                                className={"job-tab" + (activeTab === "requirements" ? " active" : "")}
-                                onClick={() => setActiveTab("requirements")}
-                            >
-                                Requirements
-                            </button>
-                        )}
+                    <a href="#apply-section" className="apply-now-button">
+                        Apply Now
+                    </a>
+                </div>
+            </div>
 
-                        {job.responsibilities && (
-                            <button
-                                type="button"
-                                className={"job-tab" + (activeTab === "responsibilities" ? " active" : "")}
-                                onClick={() => setActiveTab("responsibilities")}
-                            >
-                                Responsibilities
-                            </button>
-                        )}
+            <div className="job-details-meta-row">
+                <span className="salary"><FiDollarSign size={14} /> ₹{job.salary}</span>
+                <span><FiBarChart2 size={14} /> {job.experienceLevel}</span>
+            </div>
 
-                        {job.benefits && (
-                            <button
-                                type="button"
-                                className={"job-tab" + (activeTab === "benefits" ? " active" : "")}
-                                onClick={() => setActiveTab("benefits")}
-                            >
-                                Benefits
-                            </button>
-                        )}
+            <div className="job-details-columns">
 
-                        {(job.companyName || job.companyWebsite) && (
+                <div className="job-details-main">
+
+                    <div className="job-tabs">
+                        {tabs.map((tab) => (
                             <button
+                                key={tab.key}
                                 type="button"
-                                className={"job-tab" + (activeTab === "company" ? " active" : "")}
-                                onClick={() => setActiveTab("company")}
+                                className={"job-tab" + (activeTab === tab.key ? " active" : "")}
+                                onClick={() => setActiveTab(tab.key)}
                             >
-                                About Company
+                                {tab.label}
                             </button>
-                        )}
+                        ))}
                     </div>
 
                     <div className="job-tab-content">
-                        {activeTab === "overview" && (
-                            <section>
-                                <h2>Job Description</h2>
-                                <p>{job.description}</p>
-                            </section>
-                        )}
-
-                        {activeTab === "requirements" && (
-                            <section>
-                                <h2>Requirements</h2>
-                                <p>{job.requirements}</p>
-                            </section>
-                        )}
-
-                        {activeTab === "responsibilities" && (
-                            <section>
-                                <h2>Responsibilities</h2>
-                                <p>{job.responsibilities}</p>
-                            </section>
-                        )}
-
-                        {activeTab === "benefits" && (
-                            <section>
-                                <h2>Benefits</h2>
-                                <p>{job.benefits}</p>
-                            </section>
-                        )}
-
-                        {activeTab === "company" && (
-                            <section>
-                                <h2>About {job.companyName || "the Company"}</h2>
-                                {job.companyWebsite && (
-                                    <p>
-                                        <a
-                                            href={job.companyWebsite}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="job-company-link"
-                                        >
-                                            {job.companyWebsite}
-                                        </a>
-                                    </p>
-                                )}
-                            </section>
+                        {tabs.map((tab) =>
+                            activeTab === tab.key ? (
+                                <section key={tab.key}>
+                                    <h2>{tab.label}</h2>
+                                    {tab.key === "overview" ? (
+                                        <p>{tab.content}</p>
+                                    ) : (
+                                        <BulletList text={tab.content} />
+                                    )}
+                                </section>
+                            ) : null
                         )}
                     </div>
 
-                <div className="job-apply-section">
+                    <div className="job-apply-section" id="apply-section">
 
-                    <div className="cover-letter-group">
-                        <label htmlFor="coverLetter">
-                            Cover Letter <span className="optional-tag">(optional)</span>
-                        </label>
+                        <div className="cover-letter-group">
+                            <label htmlFor="coverLetter">
+                                Cover Letter <span className="optional-tag">(optional)</span>
+                            </label>
 
-                        <textarea
-                            id="coverLetter"
-                            value={coverLetter}
-                            onChange={(e) => setCoverLetter(e.target.value)}
-                            placeholder="Tell the recruiter why you're a good fit for this role..."
-                            rows="5"
-                            maxLength={2000}
-                        />
+                            <textarea
+                                id="coverLetter"
+                                value={coverLetter}
+                                onChange={(e) => setCoverLetter(e.target.value)}
+                                placeholder="Tell the recruiter why you're a good fit for this role..."
+                                rows="5"
+                                maxLength={2000}
+                            />
 
-                        <span className="char-count">
-                            {coverLetter.length}/2000
-                        </span>
+                            <span className="char-count">
+                                {coverLetter.length}/2000
+                            </span>
+                        </div>
+
+                        <button className="apply-button" onClick={handleApply}>
+                            Apply for Job
+                        </button>
+
+                        {applyMessage && (
+                            <p
+                                className={
+                                    applyMessage.includes("successfully")
+                                        ? "apply-message success"
+                                        : "apply-message error"
+                                }
+                            >
+                                {applyMessage}
+                            </p>
+                        )}
+
                     </div>
-
-                    <button
-                        className="apply-button"
-                        onClick={handleApply}
-                    >
-                        Apply for Job
-                    </button>
-
-                    {applyMessage && (
-                        <p
-                            className={
-                                applyMessage.includes("successfully")
-                                    ? "apply-message success"
-                                    : "apply-message error"
-                            }
-                        >
-                            {applyMessage}
-                        </p>
-                    )}
 
                 </div>
+
+                <aside className="job-company-sidebar">
+                    <h2>About the Company</h2>
+
+                    <div
+                        className="job-logo job-logo-lg"
+                        style={{ backgroundColor: getLogoColor(job.id) }}
+                    >
+                        {(job.companyName || job.title)?.charAt(0).toUpperCase()}
+                    </div>
+
+                    <h3>{job.companyName || "Company name not provided"}</h3>
+
+                    {job.companyWebsite && (
+                        <a
+                            href={job.companyWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="job-company-link"
+                        >
+                            <FiGlobe size={13} /> {job.companyWebsite}
+                        </a>
+                    )}
+                </aside>
 
             </div>
 
