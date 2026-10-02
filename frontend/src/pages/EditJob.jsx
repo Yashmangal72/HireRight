@@ -105,7 +105,7 @@ function EditJob() {
                     </div>
 
                     <div className="form-group">
-                        <label>Description</label>
+                        <label>Description (Overview)</label>
 
                         <textarea
                             name="description"
@@ -194,6 +194,39 @@ function EditJob() {
                             </select>
                         </div>
 
+                    </div>
+
+                    <div className="form-group">
+                        <label>Requirements <span className="optional-tag">(optional)</span></label>
+
+                        <textarea
+                            name="requirements"
+                            value={job.requirements || ""}
+                            onChange={handleChange}
+                            rows="4"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Responsibilities <span className="optional-tag">(optional)</span></label>
+
+                        <textarea
+                            name="responsibilities"
+                            value={job.responsibilities || ""}
+                            onChange={handleChange}
+                            rows="4"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Benefits <span className="optional-tag">(optional)</span></label>
+
+                        <textarea
+                            name="benefits"
+                            value={job.benefits || ""}
+                            onChange={handleChange}
+                            rows="4"
+                        />
                     </div>
 
                     <div className="edit-job-actions">

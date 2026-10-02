@@ -9,6 +9,9 @@ function RecruiterDashboard() {
         salary: "",
         employmentType: "FULL_TIME",
         experienceLevel: "ENTRY_LEVEL",
+        requirements: "",
+        responsibilities: "",
+        benefits: "",
     });
 
     const [message, setMessage] = useState("");
@@ -46,6 +49,9 @@ function RecruiterDashboard() {
                 salary: "",
                 employmentType: "FULL_TIME",
                 experienceLevel: "ENTRY_LEVEL",
+                requirements: "",
+                responsibilities: "",
+                benefits: "",
             });
 
         } catch (error) {
@@ -89,7 +95,7 @@ function RecruiterDashboard() {
 
                     <div className="form-group">
                         <label htmlFor="description">
-                            Job Description
+                            Job Description (Overview)
                         </label>
 
                         <textarea
@@ -97,8 +103,8 @@ function RecruiterDashboard() {
                             name="description"
                             value={job.description}
                             onChange={handleChange}
-                            placeholder="Describe the role and responsibilities..."
-                            rows="6"
+                            placeholder="Describe the role and what makes it exciting..."
+                            rows="5"
                             required
                         />
                     </div>
@@ -196,6 +202,51 @@ function RecruiterDashboard() {
                             </select>
                         </div>
 
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="requirements">
+                            Requirements <span className="optional-tag">(optional)</span>
+                        </label>
+
+                        <textarea
+                            id="requirements"
+                            name="requirements"
+                            value={job.requirements}
+                            onChange={handleChange}
+                            placeholder="e.g. 3+ years Java experience, SQL proficiency..."
+                            rows="4"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="responsibilities">
+                            Responsibilities <span className="optional-tag">(optional)</span>
+                        </label>
+
+                        <textarea
+                            id="responsibilities"
+                            name="responsibilities"
+                            value={job.responsibilities}
+                            onChange={handleChange}
+                            placeholder="e.g. Design APIs, review code, mentor juniors..."
+                            rows="4"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="benefits">
+                            Benefits <span className="optional-tag">(optional)</span>
+                        </label>
+
+                        <textarea
+                            id="benefits"
+                            name="benefits"
+                            value={job.benefits}
+                            onChange={handleChange}
+                            placeholder="e.g. Health insurance, remote-first, learning budget..."
+                            rows="4"
+                        />
                     </div>
 
                     <button

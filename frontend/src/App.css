@@ -2867,6 +2867,56 @@ body.dark-theme .stat-icon.shortlisted {
   }
 }
 
+.job-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  overflow-x: auto;
+}
+
+.job-tab {
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+.job-tab:hover {
+  color: var(--color-text-primary);
+}
+
+.job-tab.active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+.job-tab-content h2 {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.job-tab-content p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.job-company-link {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.job-company-link:hover {
+  text-decoration: underline;
+}
+
 /* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */

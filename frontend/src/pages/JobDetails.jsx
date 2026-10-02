@@ -4,6 +4,7 @@ import { getJobById } from "../services/jobService";
 import { applyForJob } from "../services/applicationService";
 import { FiMapPin, FiDollarSign, FiBriefcase, FiBarChart2 } from "react-icons/fi";
 
+
 function JobDetails() {
     const { id } = useParams();
 
@@ -12,6 +13,7 @@ function JobDetails() {
     const [error, setError] = useState("");
     const [applyMessage, setApplyMessage] = useState("");
     const [coverLetter, setCoverLetter] = useState("");
+    const [activeTab, setActiveTab] = useState("overview");
 
     const handleApply = async () => {
         setApplyMessage("");
@@ -84,11 +86,103 @@ function JobDetails() {
 
                 <div className="job-details-divider"></div>
 
-                <section className="job-description-section">
-                    <h2>Job Description</h2>
+                    <div className="job-tabs">
+                        <button
+                            type="button"
+                            className={"job-tab" + (activeTab === "overview" ? " active" : "")}
+                            onClick={() => setActiveTab("overview")}
+                        >
+                            Overview
+                        </button>
 
-                    <p>{job.description}</p>
-                </section>
+                        {job.requirements && (
+                            <button
+                                type="button"
+                                className={"job-tab" + (activeTab === "requirements" ? " active" : "")}
+                                onClick={() => setActiveTab("requirements")}
+                            >
+                                Requirements
+                            </button>
+                        )}
+
+                        {job.responsibilities && (
+                            <button
+                                type="button"
+                                className={"job-tab" + (activeTab === "responsibilities" ? " active" : "")}
+                                onClick={() => setActiveTab("responsibilities")}
+                            >
+                                Responsibilities
+                            </button>
+                        )}
+
+                        {job.benefits && (
+                            <button
+                                type="button"
+                                className={"job-tab" + (activeTab === "benefits" ? " active" : "")}
+                                onClick={() => setActiveTab("benefits")}
+                            >
+                                Benefits
+                            </button>
+                        )}
+
+                        {(job.companyName || job.companyWebsite) && (
+                            <button
+                                type="button"
+                                className={"job-tab" + (activeTab === "company" ? " active" : "")}
+                                onClick={() => setActiveTab("company")}
+                            >
+                                About Company
+                            </button>
+                        )}
+                    </div>
+
+                    <div className="job-tab-content">
+                        {activeTab === "overview" && (
+                            <section>
+                                <h2>Job Description</h2>
+                                <p>{job.description}</p>
+                            </section>
+                        )}
+
+                        {activeTab === "requirements" && (
+                            <section>
+                                <h2>Requirements</h2>
+                                <p>{job.requirements}</p>
+                            </section>
+                        )}
+
+                        {activeTab === "responsibilities" && (
+                            <section>
+                                <h2>Responsibilities</h2>
+                                <p>{job.responsibilities}</p>
+                            </section>
+                        )}
+
+                        {activeTab === "benefits" && (
+                            <section>
+                                <h2>Benefits</h2>
+                                <p>{job.benefits}</p>
+                            </section>
+                        )}
+
+                        {activeTab === "company" && (
+                            <section>
+                                <h2>About {job.companyName || "the Company"}</h2>
+                                {job.companyWebsite && (
+                                    <p>
+                                        <a
+                                            href={job.companyWebsite}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="job-company-link"
+                                        >
+                                            {job.companyWebsite}
+                                        </a>
+                                    </p>
+                                )}
+                            </section>
+                        )}
+                    </div>
 
                 <div className="job-apply-section">
 
