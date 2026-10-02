@@ -2613,9 +2613,9 @@ body.dark-theme .stat-icon.shortlisted {
 .jobs-page-layout {
   display: flex;
   gap: 1.5rem;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 1600px;
+  padding: 2rem 2rem;
   align-items: flex-start;
 }
 
