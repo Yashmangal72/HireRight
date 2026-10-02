@@ -19,6 +19,14 @@ public class JobMapper {
         response.setEmploymentType(job.getEmploymentType());
         response.setExperienceLevel(job.getExperienceLevel());
         response.setCreatedAt(job.getCreatedAt());
+        response.setRequirements(job.getRequirements());
+        response.setResponsibilities(job.getResponsibilities());
+        response.setBenefits(job.getBenefits());
+
+        if (job.getRecruiter() != null) {
+            response.setCompanyName(job.getRecruiter().getCompanyName());
+            response.setCompanyWebsite(job.getRecruiter().getCompanyWebsite());
+        }
 
         return response;
     }

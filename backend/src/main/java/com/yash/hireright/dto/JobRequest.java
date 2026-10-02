@@ -29,6 +29,12 @@ public class JobRequest {
     @NotBlank(message = "Experience level is required")
     private String experienceLevel;
 
+    private String requirements;
+
+    private String responsibilities;
+
+    private String benefits;
+
     public JobRequest() {
     }
 

@@ -56,6 +56,9 @@ public class JobService {
         job.setSalary(request.getSalary());
         job.setEmploymentType(request.getEmploymentType());
         job.setExperienceLevel(request.getExperienceLevel());
+        job.setRequirements(request.getRequirements());
+        job.setResponsibilities(request.getResponsibilities());
+        job.setBenefits(request.getBenefits());
         job.setCreatedAt(LocalDateTime.now());
 
         Job savedJob = jobRepository.save(job);
@@ -153,6 +156,9 @@ public class JobService {
         job.setSalary(request.getSalary());
         job.setEmploymentType(request.getEmploymentType());
         job.setExperienceLevel(request.getExperienceLevel());
+        job.setRequirements(request.getRequirements());
+        job.setResponsibilities(request.getResponsibilities());
+        job.setBenefits(request.getBenefits());
 
         Job updatedJob = jobRepository.save(job);
 

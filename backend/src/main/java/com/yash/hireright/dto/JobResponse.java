@@ -17,6 +17,11 @@ public class JobResponse {
     private String employmentType;
     private String experienceLevel;
     private LocalDateTime createdAt;
+    private String requirements;
+    private String responsibilities;
+    private String benefits;
+    private String companyName;
+    private String companyWebsite;
 
     public JobResponse() {
     }

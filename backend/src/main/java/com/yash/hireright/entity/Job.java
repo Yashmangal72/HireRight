@@ -41,6 +41,15 @@ public class Job {
     @JoinColumn(name = "recruiter_id", nullable = false)
     private User recruiter;
 
+    @Column(columnDefinition = "TEXT")
+    private String requirements;
+
+    @Column(columnDefinition = "TEXT")
+    private String responsibilities;
+
+    @Column(columnDefinition = "TEXT")
+    private String benefits;
+
     public Job() {
     }
 
