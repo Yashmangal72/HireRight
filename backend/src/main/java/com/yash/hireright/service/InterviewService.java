@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class InterviewService {
@@ -114,5 +115,16 @@ public class InterviewService {
         response.setNotes(interview.getNotes());
 
         return response;
+    }
+
+    public List<InterviewResponse> getMyScheduledInterviews(Authentication authentication) {
+
+        String email = authentication.getName();
+
+        return interviewRepository
+                .findByApplication_Job_Recruiter_EmailOrderByScheduledAtAsc(email)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 }
