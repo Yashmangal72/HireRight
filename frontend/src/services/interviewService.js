@@ -14,3 +14,8 @@ export const getInterview = async (applicationId) => {
     );
     return response.data;
 };
+
+export const getMyInterviews = async () => {
+    const response = await api.get("/recruiter/interviews");
+    return response.data;
+};

@@ -19,6 +19,7 @@ import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 import Candidates from "./pages/Candidates";
 import CandidateDetail from "./pages/CandidateDetail";
+import RecruiterInterviews from "./pages/RecruiterInterviews";
 
 function App() {
     return (
@@ -187,6 +188,17 @@ function App() {
                         <ProtectedRoute role="RECRUITER">
                             <AppLayout>
                                 <CandidateDetail />
+                            </AppLayout>
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/recruiter/interviews"
+                    element={
+                        <ProtectedRoute role="RECRUITER">
+                            <AppLayout>
+                                <RecruiterInterviews />
                             </AppLayout>
                         </ProtectedRoute>
                     }

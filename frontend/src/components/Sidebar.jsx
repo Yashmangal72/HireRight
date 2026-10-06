@@ -9,7 +9,7 @@ import {
     FiUsers,
     FiUserCheck,
     FiUser,
-    FiSettings,
+    FiCalendar,
     FiLogOut,
     FiSearch,
 } from "react-icons/fi";
@@ -37,6 +37,7 @@ function Sidebar() {
         { to: "/recruiter", label: "Post Job", icon: <FiPlusSquare size={18} /> },
         { to: "/my-jobs", label: "My Jobs", icon: <FiBriefcase size={18} /> },
         { to: "/recruiter/applications", label: "Applications", icon: <FiUsers size={18} /> },
+        { to: "/recruiter/interviews", label: "Interviews", icon: <FiCalendar size={18} /> },
         { to: "/recruiter/candidates", label: "Candidates", icon: <FiUserCheck size={18} /> },
     ];
 
