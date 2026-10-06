@@ -131,10 +131,10 @@ function Candidates() {
                                     </td>
                                     <td>
                                         <Link
-                                            to="/recruiter/applications"
+                                            to={`/recruiter/candidates/${candidate.candidateId}`}
                                             className="candidate-view-link"
                                         >
-                                            View
+                                            View Profile
                                         </Link>
                                     </td>
                                 </tr>
