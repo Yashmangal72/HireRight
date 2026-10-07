@@ -5,95 +5,44 @@ import {
     updateApplicationStatus,
 } from "../services/applicationService";
 import { downloadCandidateResume } from "../services/resumeService";
-import { FiDownload, FiCalendar, FiCheck, FiTrash2 } from "react-icons/fi";
-import ScheduleInterviewModal from "../components/ScheduleInterviewModal";
-import { getInterview, deleteInterview, markInterviewCompleted } from "../services/interviewService";
+import { FiDownload, FiCalendar } from "react-icons/fi";
+import { getInterview } from "../services/interviewService";
 
 function RecruiterApplications() {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [resumeError, setResumeError] = useState("");
-    const [modalApplication, setModalApplication] = useState(null);
     const [interviews, setInterviews] = useState({});
     const [activeTab, setActiveTab] = useState("ALL");
     const [searchParams] = useSearchParams();
     const highlightId = searchParams.get("highlight");
 
-
     const handleDownloadResume = async (application) => {
-    setResumeError("");
-
-    try {
-        const blob = await downloadCandidateResume(application.id);
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${application.candidateName}-resume`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(url);
-    } catch (error) {
-        console.error(error);
-
-        if (error.response?.status === 404) {
-            setResumeError(
-                `${application.candidateName} hasn't uploaded a resume yet.`
-            );
-        } else {
-            setResumeError("Failed to download resume.");
-        }
-
-        setTimeout(() => setResumeError(""), 4000);
-    }
-};
-
-    const openScheduleModal = async (application) => {
-        try {
-            const existing = await getInterview(application.id);
-            setInterviews((current) => ({
-                ...current,
-                [application.id]: existing,
-            }));
-        } catch (error) {
-            // 404 is expected when no interview exists yet — not an error case
-        }
-
-        setModalApplication(application);
-    };
-
-    const handleInterviewScheduled = (interview) => {
-        setInterviews((current) => ({
-            ...current,
-            [interview.applicationId]: interview,
-        }));
-    };
-
-    const handleDeleteInterview = async (applicationId) => {
-        if (!window.confirm("Delete this scheduled interview?")) return;
+        setResumeError("");
 
         try {
-            await deleteInterview(applicationId);
-            setInterviews((current) => {
-                const next = { ...current };
-                delete next[applicationId];
-                return next;
-            });
+            const blob = await downloadCandidateResume(application.id);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `${application.candidateName}-resume`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error(error);
-        }
-    };
 
-    const handleMarkCompleted = async (applicationId) => {
-        try {
-            const updated = await markInterviewCompleted(applicationId);
-            setInterviews((current) => ({
-                ...current,
-                [applicationId]: updated,
-            }));
-        } catch (error) {
-            console.error(error);
+            if (error.response?.status === 404) {
+                setResumeError(
+                    `${application.candidateName} hasn't uploaded a resume yet.`
+                );
+            } else {
+                setResumeError("Failed to download resume.");
+            }
+
+            setTimeout(() => setResumeError(""), 4000);
         }
     };
 
@@ -347,40 +296,24 @@ function RecruiterApplications() {
                                 </div>
                             )}
 
-                            <div className="interview-actions-row">
-                                <button
-                                    type="button"
-                                    className="secondary-button schedule-interview-btn"
-                                    onClick={() => openScheduleModal(application)}
-                                >
-                                    <FiCalendar size={14} />{" "}
-                                    {interviews[application.id]
-                                        ? "Reschedule Interview"
-                                        : "Schedule Interview"}
-                                </button>
-
-                                {interviews[application.id] && (
-                                    <>
-                                        {!interviews[application.id].completed && (
-                                            <button
-                                                type="button"
-                                                className="secondary-button"
-                                                onClick={() => handleMarkCompleted(application.id)}
-                                            >
-                                                <FiCheck size={14} /> Mark Done
-                                            </button>
-                                        )}
-
-                                        <button
-                                            type="button"
-                                            className="danger-button"
-                                            onClick={() => handleDeleteInterview(application.id)}
-                                        >
-                                            <FiTrash2 size={14} /> Delete
-                                        </button>
-                                    </>
-                                )}
-                            </div>
+                            {interviews[application.id] && (
+                                <div className="interview-summary-row">
+                                    <FiCalendar size={14} />
+                                    <span>
+                                        {new Date(
+                                            interviews[application.id].scheduledAt
+                                        ).toLocaleString("en-IN", {
+                                            day: "2-digit",
+                                            month: "short",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                        {" · "}
+                                        {interviews[application.id].interviewType}
+                                        {interviews[application.id].completed && " · Completed"}
+                                    </span>
+                                </div>
+                            )}
 
                             <div className="status-section">
 
@@ -425,15 +358,6 @@ function RecruiterApplications() {
                     ))}
 
                 </div>
-            )}
-
-            {modalApplication && (
-                <ScheduleInterviewModal
-                    application={modalApplication}
-                    existingInterview={interviews[modalApplication.id]}
-                    onClose={() => setModalApplication(null)}
-                    onScheduled={handleInterviewScheduled}
-                />
             )}
 
         </div>

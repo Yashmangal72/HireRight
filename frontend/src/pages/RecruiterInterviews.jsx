@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getMyInterviews } from "../services/interviewService";
+import {
+    getMyInterviews,
+    deleteInterview,
+    markInterviewCompleted,
+} from "../services/interviewService";
+import ScheduleInterviewModal from "../components/ScheduleInterviewModal";
 import {
     FiCalendar,
     FiClock,
     FiLink,
     FiMessageSquare,
+    FiCheck,
+    FiTrash2,
 } from "react-icons/fi";
 
 function isPast(dateString) {
@@ -16,22 +23,57 @@ function RecruiterInterviews() {
     const [interviews, setInterviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [modalInterview, setModalInterview] = useState(null);
+
+    const fetchInterviews = async () => {
+        try {
+            const data = await getMyInterviews();
+            setInterviews(data);
+        } catch (error) {
+            console.error(error);
+            setError("Failed to load interviews");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchInterviews = async () => {
-            try {
-                const data = await getMyInterviews();
-                setInterviews(data);
-            } catch (error) {
-                console.error(error);
-                setError("Failed to load interviews");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchInterviews();
     }, []);
+
+    const handleDelete = async (applicationId) => {
+        if (!window.confirm("Delete this scheduled interview?")) return;
+
+        try {
+            await deleteInterview(applicationId);
+            setInterviews((current) =>
+                current.filter((i) => i.applicationId !== applicationId)
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleMarkCompleted = async (applicationId) => {
+        try {
+            const updated = await markInterviewCompleted(applicationId);
+            setInterviews((current) =>
+                current.map((i) =>
+                    i.applicationId === applicationId ? updated : i
+                )
+            );
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleRescheduled = (updated) => {
+        setInterviews((current) =>
+            current.map((i) =>
+                i.applicationId === updated.applicationId ? updated : i
+            )
+        );
+    };
 
     if (loading) {
         return (
@@ -66,6 +108,7 @@ function RecruiterInterviews() {
                 </div>
                 <span className="interview-type-tag">
                     {interview.interviewType}
+                    {interview.completed && " · Completed"}
                 </span>
             </div>
 
@@ -107,8 +150,36 @@ function RecruiterInterviews() {
                 )}
             </div>
 
+            <div className="interview-actions-row">
+                <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() => setModalInterview(interview)}
+                >
+                    <FiCalendar size={14} /> Reschedule
+                </button>
+
+                {!interview.completed && (
+                    <button
+                        type="button"
+                        className="secondary-button"
+                        onClick={() => handleMarkCompleted(interview.applicationId)}
+                    >
+                        <FiCheck size={14} /> Mark Done
+                    </button>
+                )}
+
+                <button
+                    type="button"
+                    className="danger-button"
+                    onClick={() => handleDelete(interview.applicationId)}
+                >
+                    <FiTrash2 size={14} /> Delete
+                </button>
+            </div>
+
             <Link
-                to="/recruiter/applications"
+                to={`/recruiter/applications?highlight=${interview.applicationId}`}
                 className="candidate-view-link"
                 style={{ marginTop: "0.875rem", display: "inline-block" }}
             >
@@ -163,6 +234,19 @@ function RecruiterInterviews() {
                         </div>
                     )}
                 </>
+            )}
+
+            {modalInterview && (
+                <ScheduleInterviewModal
+                    application={{
+                        id: modalInterview.applicationId,
+                        candidateName: modalInterview.candidateName,
+                        jobTitle: modalInterview.jobTitle,
+                    }}
+                    existingInterview={modalInterview}
+                    onClose={() => setModalInterview(null)}
+                    onScheduled={handleRescheduled}
+                />
             )}
 
         </div>
