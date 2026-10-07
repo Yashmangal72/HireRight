@@ -3430,6 +3430,13 @@ body.dark-theme .stat-icon.shortlisted {
   color: var(--color-text-primary);
 }
 
+.interview-actions-row {
+  display: flex;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
 /* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */

@@ -4,9 +4,9 @@ import {
     updateApplicationStatus,
 } from "../services/applicationService";
 import { downloadCandidateResume } from "../services/resumeService";
-import { FiDownload, FiCalendar } from "react-icons/fi";
+import { FiDownload, FiCalendar, FiCheck, FiTrash2 } from "react-icons/fi";
 import ScheduleInterviewModal from "../components/ScheduleInterviewModal";
-import { getInterview } from "../services/interviewService";
+import { getInterview, deleteInterview, markInterviewCompleted } from "../services/interviewService";
 
 function RecruiterApplications() {
     const [applications, setApplications] = useState([]);
@@ -67,11 +67,59 @@ function RecruiterApplications() {
         }));
     };
 
+    const handleDeleteInterview = async (applicationId) => {
+        if (!window.confirm("Delete this scheduled interview?")) return;
+
+        try {
+            await deleteInterview(applicationId);
+            setInterviews((current) => {
+                const next = { ...current };
+                delete next[applicationId];
+                return next;
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleMarkCompleted = async (applicationId) => {
+        try {
+            const updated = await markInterviewCompleted(applicationId);
+            setInterviews((current) => ({
+                ...current,
+                [applicationId]: updated,
+            }));
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         const fetchApplications = async () => {
             try {
                 const data = await getAllApplications();
                 setApplications(data);
+
+                const interviewResults = await Promise.allSettled(
+                    data
+                        .filter((app) =>
+                            ["INTERVIEW", "HIRED", "REJECTED"].includes(app.status)
+                        )
+                        .map((app) =>
+                            getInterview(app.id).then((interview) => ({
+                                id: app.id,
+                                interview,
+                            }))
+                        )
+                );
+
+                const interviewMap = {};
+                interviewResults.forEach((result) => {
+                    if (result.status === "fulfilled") {
+                        interviewMap[result.value.id] = result.value.interview;
+                    }
+                });
+                setInterviews(interviewMap);
             } catch (error) {
                 console.error(error);
                 setError(
@@ -283,16 +331,40 @@ function RecruiterApplications() {
                                 </div>
                             )}
 
-                            <button
-                                type="button"
-                                className="secondary-button schedule-interview-btn"
-                                onClick={() => openScheduleModal(application)}
-                            >
-                                <FiCalendar size={14} />{" "}
-                                {interviews[application.id]
-                                    ? "Reschedule Interview"
-                                    : "Schedule Interview"}
-                            </button>
+                            <div className="interview-actions-row">
+                                <button
+                                    type="button"
+                                    className="secondary-button schedule-interview-btn"
+                                    onClick={() => openScheduleModal(application)}
+                                >
+                                    <FiCalendar size={14} />{" "}
+                                    {interviews[application.id]
+                                        ? "Reschedule Interview"
+                                        : "Schedule Interview"}
+                                </button>
+
+                                {interviews[application.id] && (
+                                    <>
+                                        {!interviews[application.id].completed && (
+                                            <button
+                                                type="button"
+                                                className="secondary-button"
+                                                onClick={() => handleMarkCompleted(application.id)}
+                                            >
+                                                <FiCheck size={14} /> Mark Done
+                                            </button>
+                                        )}
+
+                                        <button
+                                            type="button"
+                                            className="danger-button"
+                                            onClick={() => handleDeleteInterview(application.id)}
+                                        >
+                                            <FiTrash2 size={14} /> Delete
+                                        </button>
+                                    </>
+                                )}
+                            </div>
 
                             <div className="status-section">
 

@@ -19,3 +19,14 @@ export const getMyInterviews = async () => {
     const response = await api.get("/recruiter/interviews");
     return response.data;
 };
+
+export const deleteInterview = async (applicationId) => {
+    await api.delete(`/applications/${applicationId}/interview`);
+};
+
+export const markInterviewCompleted = async (applicationId) => {
+    const response = await api.patch(
+        `/applications/${applicationId}/interview/complete`
+    );
+    return response.data;
+};
