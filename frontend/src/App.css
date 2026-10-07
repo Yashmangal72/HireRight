@@ -3454,6 +3454,25 @@ body.dark-theme .stat-icon.shortlisted {
   font-weight: 600;
   color: var(--color-accent);
 }
+
+.confirm-dialog {
+  max-width: 400px;
+  text-align: left;
+}
+
+.confirm-dialog h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.625rem;
+}
+
+.confirm-dialog p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
 /* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */

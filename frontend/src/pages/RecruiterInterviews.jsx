@@ -6,6 +6,7 @@ import {
     markInterviewCompleted,
 } from "../services/interviewService";
 import ScheduleInterviewModal from "../components/ScheduleInterviewModal";
+import ConfirmDialog from "../components/ConfirmDialog";
 import {
     FiCalendar,
     FiClock,
@@ -24,6 +25,7 @@ function RecruiterInterviews() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [modalInterview, setModalInterview] = useState(null);
+    const [deleteTarget, setDeleteTarget] = useState(null);
 
     const fetchInterviews = async () => {
         try {
@@ -41,8 +43,9 @@ function RecruiterInterviews() {
         fetchInterviews();
     }, []);
 
-    const handleDelete = async (applicationId) => {
-        if (!window.confirm("Delete this scheduled interview?")) return;
+    const handleDelete = async () => {
+        const applicationId = deleteTarget.applicationId;
+        setDeleteTarget(null);
 
         try {
             await deleteInterview(applicationId);
@@ -172,7 +175,7 @@ function RecruiterInterviews() {
                 <button
                     type="button"
                     className="danger-button"
-                    onClick={() => handleDelete(interview.applicationId)}
+                    onClick={() => setDeleteTarget(interview)}
                 >
                     <FiTrash2 size={14} /> Delete
                 </button>
@@ -234,6 +237,16 @@ function RecruiterInterviews() {
                         </div>
                     )}
                 </>
+            )}
+
+            {deleteTarget && (
+                <ConfirmDialog
+                    title="Delete Interview"
+                    message={`Delete the scheduled interview with ${deleteTarget.candidateName}? This can't be undone.`}
+                    confirmLabel="Delete"
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteTarget(null)}
+                />
             )}
 
             {modalInterview && (
