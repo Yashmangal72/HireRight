@@ -3437,6 +3437,11 @@ body.dark-theme .stat-icon.shortlisted {
   margin-top: 0.75rem;
 }
 
+.recruiter-application-card.highlighted {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
 /* ============================================================
    RESPONSIVE — TABLET (max 768px)
    ============================================================ */

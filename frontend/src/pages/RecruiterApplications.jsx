@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
     getAllApplications,
     updateApplicationStatus,
@@ -16,6 +17,8 @@ function RecruiterApplications() {
     const [modalApplication, setModalApplication] = useState(null);
     const [interviews, setInterviews] = useState({});
     const [activeTab, setActiveTab] = useState("ALL");
+    const [searchParams] = useSearchParams();
+    const highlightId = searchParams.get("highlight");
 
 
     const handleDownloadResume = async (application) => {
@@ -134,6 +137,15 @@ function RecruiterApplications() {
         fetchApplications();
     }, []);
 
+    useEffect(() => {
+        if (!highlightId || applications.length === 0) return;
+
+        const el = document.getElementById(`application-${highlightId}`);
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, [highlightId, applications]);
+
     const handleStatusChange = async (id, status) => {
         try {
             const updatedApplication =
@@ -248,7 +260,11 @@ function RecruiterApplications() {
 
                     {filteredApplications.map((application) => (
                         <div
-                            className="recruiter-application-card"
+                            className={
+                                "recruiter-application-card" +
+                                (String(application.id) === highlightId ? " highlighted" : "")
+                            }
+                            id={`application-${application.id}`}
                             key={application.id}
                         >
 
