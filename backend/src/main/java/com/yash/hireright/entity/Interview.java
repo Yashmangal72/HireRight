@@ -36,6 +36,9 @@ public class Interview {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private boolean completed = false;
+
     public Interview() {
     }
 }

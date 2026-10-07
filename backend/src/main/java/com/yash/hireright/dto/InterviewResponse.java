@@ -18,6 +18,7 @@ public class InterviewResponse {
     private Integer durationMinutes;
     private String meetingLink;
     private String notes;
+    private boolean completed;
 
     public InterviewResponse() {
     }

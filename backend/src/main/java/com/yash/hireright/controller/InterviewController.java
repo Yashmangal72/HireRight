@@ -45,4 +45,25 @@ public class InterviewController {
                 )
         );
     }
+
+    @PreAuthorize("hasRole('RECRUITER')")
+    @DeleteMapping
+    public ResponseEntity<Void> deleteInterview(
+            @PathVariable Long applicationId,
+            Authentication authentication
+    ) {
+        interviewService.deleteInterview(applicationId, authentication);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasRole('RECRUITER')")
+    @PatchMapping("/complete")
+    public ResponseEntity<InterviewResponse> markCompleted(
+            @PathVariable Long applicationId,
+            Authentication authentication
+    ) {
+        return ResponseEntity.ok(
+                interviewService.markCompleted(applicationId, authentication)
+        );
+    }
 }

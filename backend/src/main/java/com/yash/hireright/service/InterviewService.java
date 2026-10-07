@@ -113,6 +113,7 @@ public class InterviewService {
         response.setDurationMinutes(interview.getDurationMinutes());
         response.setMeetingLink(interview.getMeetingLink());
         response.setNotes(interview.getNotes());
+        response.setCompleted(interview.isCompleted());
 
         return response;
     }
@@ -126,5 +127,49 @@ public class InterviewService {
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    public void deleteInterview(Long applicationId, Authentication authentication) {
+
+        String recruiterEmail = authentication.getName();
+
+        Interview interview = interviewRepository
+                .findByApplication_Id(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("No interview scheduled"));
+
+        String jobRecruiterEmail =
+                interview.getApplication().getJob().getRecruiter().getEmail();
+
+        if (!jobRecruiterEmail.equals(recruiterEmail)) {
+            throw new UnauthorizedException(
+                    "You are not authorized to delete this interview"
+            );
+        }
+
+        interviewRepository.delete(interview);
+    }
+
+    public InterviewResponse markCompleted(Long applicationId, Authentication authentication) {
+
+        String recruiterEmail = authentication.getName();
+
+        Interview interview = interviewRepository
+                .findByApplication_Id(applicationId)
+                .orElseThrow(() -> new ResourceNotFoundException("No interview scheduled"));
+
+        String jobRecruiterEmail =
+                interview.getApplication().getJob().getRecruiter().getEmail();
+
+        if (!jobRecruiterEmail.equals(recruiterEmail)) {
+            throw new UnauthorizedException(
+                    "You are not authorized to update this interview"
+            );
+        }
+
+        interview.setCompleted(true);
+
+        Interview saved = interviewRepository.save(interview);
+
+        return mapToResponse(saved);
     }
 }
