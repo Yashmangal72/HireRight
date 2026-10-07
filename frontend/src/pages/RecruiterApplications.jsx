@@ -7,6 +7,7 @@ import {
 import { downloadCandidateResume } from "../services/resumeService";
 import { FiDownload, FiCalendar } from "react-icons/fi";
 import { getInterview } from "../services/interviewService";
+import ScheduleInterviewModal from "../components/ScheduleInterviewModal";
 
 function RecruiterApplications() {
     const [applications, setApplications] = useState([]);
@@ -17,6 +18,7 @@ function RecruiterApplications() {
     const [activeTab, setActiveTab] = useState("ALL");
     const [searchParams] = useSearchParams();
     const highlightId = searchParams.get("highlight");
+    const [modalApplication, setModalApplication] = useState(null);
 
     const handleDownloadResume = async (application) => {
         setResumeError("");
@@ -44,6 +46,13 @@ function RecruiterApplications() {
 
             setTimeout(() => setResumeError(""), 4000);
         }
+    };
+
+    const handleInterviewScheduled = (interview) => {
+        setInterviews((current) => ({
+            ...current,
+            [interview.applicationId]: interview,
+        }));
     };
 
     useEffect(() => {
@@ -296,7 +305,7 @@ function RecruiterApplications() {
                                 </div>
                             )}
 
-                            {interviews[application.id] && (
+                            {interviews[application.id] ? (
                                 <div className="interview-summary-row">
                                     <FiCalendar size={14} />
                                     <span>
@@ -313,6 +322,14 @@ function RecruiterApplications() {
                                         {interviews[application.id].completed && " · Completed"}
                                     </span>
                                 </div>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="secondary-button schedule-interview-btn"
+                                    onClick={() => setModalApplication(application)}
+                                >
+                                    <FiCalendar size={14} /> Schedule Interview
+                                </button>
                             )}
 
                             <div className="status-section">
@@ -358,6 +375,15 @@ function RecruiterApplications() {
                     ))}
 
                 </div>
+            )}
+
+            {modalApplication && (
+                <ScheduleInterviewModal
+                    application={modalApplication}
+                    existingInterview={null}
+                    onClose={() => setModalApplication(null)}
+                    onScheduled={handleInterviewScheduled}
+                />
             )}
 
         </div>
